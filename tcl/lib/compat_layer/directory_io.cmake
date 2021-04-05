@@ -33,7 +33,7 @@ function(tcl_dirio_posix _have_posix)
     list(APPEND CMAKE_EXTRA_INCLUDE_FILES "dirent.h")
 
     if (HAVE_DIRENT_H)
-        check_type_size("DIR" POSIX_DIR)
+        check_type_size("DIR*" POSIX_DIR)
         check_type_size("struct dirent" POSIX_DIRENT)
 
         if (HAVE_POSIX_DIR 
@@ -61,7 +61,7 @@ function(tcl_dirio_bsd _have_bsd)
     list(APPEND CMAKE_EXTRA_INCLUDE_FILES "sys/dir.h")
 
     if (HAVE_SYS_DIR_H)
-        check_type_size("DIR" BSD_DIR)
+        check_type_size("DIR*" BSD_DIR)
         check_type_size("struct direct" BSD_DIRECT)
 
         if (HAVE_BSD_DIR 
@@ -97,7 +97,7 @@ if (NOT HAVE_POSIX_DIR_IO)
                                    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/dirent_bsd>
                                    $<INSTALL_INTERFACE:include>
                                    )
-        target_compile_definitions(tcl_config INTERFACE NO_DIRENT_H)
+        target_compile_definitions(tcl_config INTERFACE NO_DIRENT_H=1)
 
         # handle extra header install
         if (TCL_ENABLE_INSTALL_DEVELOPMENT)
@@ -116,7 +116,7 @@ if (NOT HAVE_POSIX_DIR_IO)
         target_sources(tcl PRIVATE 
                        src/dirent_severe/opendir.c
                        )
-        target_compile_definitions(tcl_config INTERFACE USE_DIRENT2_H)
+        target_compile_definitions(tcl_config INTERFACE USE_DIRENT2_H=1)
 
         # handle extra header install
         if (TCL_ENABLE_INSTALL_DEVELOPMENT)

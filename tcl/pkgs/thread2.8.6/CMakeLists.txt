@@ -26,16 +26,16 @@ project(TEA-Thread
 
 ## Target ######################################################################
 add_library(tea_thread SHARED
-            src/psGdbm.h             src/common/psGdbm.c
-            src/psLmdb.h             src/common/psLmdb.c
-            src/tclXkeylist.h        src/common/tclXkeylist.c
+            src/psGdbm.h             src/psGdbm.c
+            src/psLmdb.h             src/psLmdb.c
+            src/tclXkeylist.h        src/tclXkeylist.c
                                      src/threadCmd.c
                                      src/threadNs.c
                                      src/threadPoolCmd.c
-            src/threadSpCmd.h        src/common/threadSpCmd.c
-            src/threadSvCmd.h        src/common/threadSvCmd.c
-            src/threadSvKeylistCmd.h src/common/threadSvKeylistCmd.c
-            src/threadSvListCmd.h    src/common/threadSvListCmd.c
+            src/threadSpCmd.h        src/threadSpCmd.c
+            src/threadSvCmd.h        src/threadSvCmd.c
+            src/threadSvKeylistCmd.h src/threadSvKeylistCmd.c
+            src/threadSvListCmd.h    src/threadSvListCmd.c
 
             src/tclThread.h
             src/tclThreadInt.h
@@ -56,7 +56,6 @@ target_link_libraries(tea_thread PRIVATE
                       tclstub
                       )
 
-message("TEA: Thread ${PROJECT_VERSION}")
 string(REPLACE "." "" TEA_THREAD_DOTLESS_VERSION "${PROJECT_VERSION}")
 set_target_properties(tea_thread PROPERTIES
                       PREFIX ""

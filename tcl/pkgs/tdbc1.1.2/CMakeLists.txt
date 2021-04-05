@@ -97,15 +97,21 @@ string(REPLACE "." "," TDBC_COMMA_VERSION "${TDBC_VERSION}")
 set_target_properties(tea_tdbc PROPERTIES
                       PREFIX ""
                       OUTPUT_NAME "tdbc${TDBC_DOTLESS_VERSION}"
+                      POSITION_INDEPENDENT_CODE TRUE
                       )
 set_target_properties(tea_tdbcstub PROPERTIES
                       OUTPUT_NAME "tdbcstub${TDBC_DOTLESS_VERSION}"
+                      POSITION_INDEPENDENT_CODE TRUE
                       )
 set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/tdbc.rc 
                             TARGET_DIRECTORY tea_tdbc
                             PROPERTIES
                                 COMPILE_DEFINITIONS "$<$<CONFIG:Debug>:DEBUG>"
                             )
+target_include_directories(tea_tdbcstub PUBLIC 
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tdbc${TDBC_VERSION}>
+                           )
 
 ## Configuration ###############################################################
 set(TCL_VERSION_REQ     "8.5-")

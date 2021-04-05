@@ -48,6 +48,15 @@ include(TestBigEndian)
 # Position independent code #
 check_pie_supported(LANGUAGES C)
 
+# Whether we need to link to libm
+cmake_push_check_state(RESET)
+check_library_exists("m" "sin" "" HAVE_M)
+cmake_pop_check_state()
+if (HAVE_M)
+    # if libm exist we want to link it to everything
+    link_libraries(m)
+endif ()
+
 ## Options #####################################################################
 option(TCL_ENABLE_INSTALL 
        "Enable the Tcl runtime install target [On]" On

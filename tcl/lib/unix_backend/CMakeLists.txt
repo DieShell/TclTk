@@ -98,7 +98,7 @@ endif ()
 
 # check if char == unsigned char by default
 if (NOT DEFINED TCL_UNSIGNED_CHAR_CHECKED)
-    file(WRITE unsigned-char.c
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/unsigned-char.c"
          [[
          int main() { char c = -1; return c == (unsigned char)~0; }
          ]])
@@ -130,7 +130,7 @@ main() {
 ]] HAVE_UNION_WAIT)
 
 if (NOT DEFINED TCL_PUTENV_CHECKED)
-    file(WRITE putenv-copies.c
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/putenv-copies.c"
         [[
         #include <stdlib.h>
         #include <string.h>
@@ -158,9 +158,9 @@ include(thread_safe.cmake)
 
 ## can we use fts instead of readdir
 if (HAVE_FTS_H)
-    check_symbol_exists("fts_open" "fts.h"                   HAVE_FTS_OPEN)
-    check_symbol_exists("fts_read" "fts.h"                   HAVE_FTS_READ)
-    check_symbol_exists("fts_close" "fts.h"                  HAVE_FTS_CLOSE)
+    check_symbol_exists("fts_open"  "fts.h" HAVE_FTS_OPEN)
+    check_symbol_exists("fts_read"  "fts.h" HAVE_FTS_READ)
+    check_symbol_exists("fts_close" "fts.h" HAVE_FTS_CLOSE)
 
     if (HAVE_FTS_OPEN AND HAVE_FTS_READ AND HAVE_FTS_CLOSE)
         set(HAVE_FTS TRUE CACHE BOOL "have the fts_* functions" FORCE)
@@ -222,29 +222,20 @@ target_compile_definitions(tcl_config INTERFACE
 
 target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/manifest>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/win>
+                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix>
                            )
-target_include_directories(tcl_public INTERFACE
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/win>
-                           )
-
-target_link_options(tcl_config INTERFACE
-                    $<$<C_COMPILER_ID:GNU,Clang>:-municode>
-                    )
-target_link_options(tclsh PRIVATE
-                    $<$<C_COMPILER_ID:GNU,Clang>:-mconsole>
-                    )
-
-target_link_libraries(tcl_config INTERFACE kernel32 ws2_32 netapi32 userenv user32 advapi32)
+set_source_files_properties(src/tclUnixInit.c
+                            TARGET_DIRECTORY tcl
+                            PROPERTIES
+                                COMPILE_DEFINITIONS 
+                                "TCL_LIBRARY=\"${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}\";TCL_PACKAGE_PATH=\"{${CMAKE_INSTALL_LIBDIR}}\""
+                            )
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclWinInt.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclWinPort.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclUnixInt.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclUnixPort.h"
             DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/win"
+            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix"
             )
 endif ()

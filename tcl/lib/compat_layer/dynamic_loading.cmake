@@ -28,6 +28,14 @@ cmake_push_check_state(RESET)
 # If we have dlfcn.h, no need to do anything else
 
 check_include_file("dlfcn.h" HAVE_DLFCN_H)
+if (HAVE_DLFCN_H)
+    # we also probably need -ldl if we have dlopen
+    check_library_exists("dl" "dlopen" "" HAVE_DL)
+    if (HAVE_DL)
+        target_link_libraries(tcl PRIVATE dl)
+    endif ()
+endif ()
+
 if (HAVE_DLFCN_H AND NOT APPLE) # apple is special
     target_sources(tcl PRIVATE 
                    src/dynamic/tclLoadDl.c
@@ -118,7 +126,7 @@ endif ()
 # Windows provides LoadLibrary(Ex)(A|W) in windows.h (or some other header 
 # included in windows.h)
 
-list(APPEND CMAKE_REQUIRED_DEFINES WIN32_LEAN_AND_MEAN)
+list(APPEND CMAKE_REQUIRED_DEFINITIONS "-DWIN32_LEAN_AND_MEAN=1")
 check_include_file("windows.h" HAVE_WINDOWS_H)
 
 if (HAVE_WINDOWS_H)

@@ -29,7 +29,7 @@ if (WIN32)
     return()
 endif ()
 
-cmake_check_state_push(RESET)
+cmake_push_check_state(RESET)
 ## Headers #####################################################################
 check_include_file("sys/types.h"  HAVE_SYS_TYPES_H)
 check_include_file("sys/socket.h" HAVE_SYS_SOCKET_H)
@@ -74,7 +74,7 @@ else ()
     set (_TCL_HAVE_RFC_FUNCS 0)
 endif ()
 
-cmake_check_state_pop()
+cmake_pop_check_state()
 
 # if we have everything we need, do not do anything
 if (_TCL_HAVE_RFC_FUNCS AND _TCL_HAVE_RFC_TYPES)

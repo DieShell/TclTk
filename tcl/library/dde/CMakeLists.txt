@@ -18,8 +18,10 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
-install(FILES
-        "${CMAKE_CURRENT_SOURCE_DIR}/pkgIndex.tcl"
-        DESTINATION
-        "${CMAKE_INSTALL_LIBDIR}/dde${TCL_DDE_VERSION}"
-        )
+if (TARGET tcl_dde)
+    install(FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/pkgIndex.tcl"
+            DESTINATION
+            "${CMAKE_INSTALL_LIBDIR}/dde${TCL_DDE_VERSION}"
+            )
+endif ()

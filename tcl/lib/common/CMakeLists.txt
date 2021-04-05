@@ -139,7 +139,6 @@ target_sources(tclstub PRIVATE
 target_compile_definitions(tcl_config INTERFACE 
                            BUILD_tcl=1
                            MODULE_SCOPE=extern
-                           $<$<BOOL:${TCL_ENABLE_THREADS}>:TCL_THREADS=1>
                            $<$<BOOL:${TCL_ENABLE_UNLOAD_DLLS}>:TCL_UNLOAD_DLLS=1>
                            )
 
@@ -148,10 +147,7 @@ target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic>
                            )
-target_include_directories(tcl_public INTERFACE
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic>
-                           )
+
 set(CFG_LIST 
     "CFG_INSTALL_LIBDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\""
     "CFG_INSTALL_BINDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\""

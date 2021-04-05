@@ -76,6 +76,7 @@ endif ()
 check_symbol_exists("memcmp"  "string.h" HAVE_MEMCMP)
 check_symbol_exists("memmove" "string.h" HAVE_MEMMOVE)
 check_symbol_exists("strstr"  "string.h" HAVE_STRSTR)
+check_symbol_exists("strtol" "strlib.h"  HAVE_STRTOL)
 check_symbol_exists("strtoul" "strlib.h" HAVE_STRTOUL)
 
 # cast to union
@@ -93,7 +94,7 @@ main() {
 
 # check if strstr is broken
 if (HAVE_STRSTR AND NOT DEFINED TCL_STRSTR_TESTED)
-    file(WRITE strstr-test.c
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/strstr-test.c"
          [[#include <string.h>
            int
            main() {
@@ -101,30 +102,29 @@ if (HAVE_STRSTR AND NOT DEFINED TCL_STRSTR_TESTED)
                return (strstr("\0test", "test") ? 0 : 1);
            }
          ]])
-    try_run(TCL_STRSTR_BROKEN _ignore
+    try_run(TCL_STRSTR_WORKS _ignore
             "${CMAKE_CURRENT_BINARY_DIR}"
             "${CMAKE_CURRENT_BINARY_DIR}/strstr-test.c"
             )
-    if (TCL_STRSTR_BROKEN)
-        set(HAVE_STRSTR FALSE CACHE INTERNAL "" FORCE)
-    endif ()
+    set(HAVE_STRSTR "${TCL_STRSTR_WORKS}" CACHE INTERNAL "" FORCE)
     set(TCL_STRSTR_TESTED 1 CACHE INTERNAL "" FORCE)
 endif ()
 
 # check if strtoul is broken
 if (HAVE_STRTOUL AND NOT DEFINED TCL_STRTOUL_TESTED)
-    file(WRITE stroul-test.c
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/stroul-test.c"
          [[#include <stdlib.h>
            int
            main() {
                char *term, *str = "0";
-               return (strtoul(str, &term, 0) != 0 || term != str + 1);
+               return (strtoul(str, &term, 0) == 0 && term == str + 1);
            }
          ]])
-    try_run(TCL_STRTOUL_BROKEN _still_ignore
+    try_run(TCL_STRTOUL_WORKS _still_ignore
             "${CMAKE_CURRENT_BINARY_DIR}"
             "${CMAKE_CURRENT_BINARY_DIR}/strtoul-test.c"
             )
+    set(HAVE_STRTOUL "${TCL_STRTOUL_WORKS}" CACHE INTERNAL "" FORCE)
     set(TCL_STRTOUL_TESTED 1 CACHE INTERNAL "" FORCE)
 endif ()
 
@@ -132,12 +132,12 @@ cmake_pop_check_state()
 
 ## Add to config ###############################################################
 target_compile_definitions(tcl_config INTERFACE
-                           $<${STDC_HEADERS}:STDC_HEADERS>
+                           $<${STDC_HEADERS}:STDC_HEADERS=1>
                            $<$<BOOL:${HAVE_CAST_TO_UNION}>:HAVE_CAST_TO_UNION=1>
                            $<$<BOOL:${HAVE_MEMCMP}>:HAVE_MEMCMP=1>
                            $<$<NOT:$<BOOL:${HAVE_MEMMOVE}>>:NO_MEMMOVE=1>
-                           $<$<NOT:$<AND:$<BOOL:${HAVE_STDLIB_H}>,$<BOOL:${HAVE_FREE}>>>:NO_STDLIB_H>
-                           $<$<NOT:$<AND:$<BOOL:${HAVE_STRING_H}>,$<BOOL:${HAVE_MEMCHR}>>>:NO_STRING_H>
+                           $<$<NOT:$<AND:$<BOOL:${HAVE_STDLIB_H}>,$<BOOL:${HAVE_FREE}>>>:NO_STDLIB_H=1>
+                           $<$<NOT:$<AND:$<BOOL:${HAVE_STRING_H}>,$<BOOL:${HAVE_MEMCHR}>>>:NO_STRING_H=1>
                            )
 
 if (NOT STDC_HEADERS)
@@ -148,8 +148,10 @@ if (NOT STDC_HEADERS)
 endif ()
 
 target_sources(tcl_config INTERFACE 
-               $<$<NOT:$<BOOL:${HAVE_MEMCMP}>>:src/ansic/memcmp.c>
-               $<$<NOT:$<BOOL:${HAVE_STRSTR}>>:src/ansic/strstr.c>
+               $<$<NOT:$<BOOL:${HAVE_MEMCMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/ansic/memcmp.c>
+               $<$<NOT:$<BOOL:${HAVE_STRSTR}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/ansic/strstr.c>
+               $<$<NOT:$<BOOL:${HAVE_STRTOL}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strtol.c>
+               $<$<NOT:$<BOOL:${HAVE_STRTOUL}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strtoul.c>
                )
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)

@@ -39,8 +39,6 @@ check_include_file("dlfcn.h"    HAVE_DLFCN_H)
 
 check_symbol_exists("lseek"        "unistd.h"   HAVE_LSEEK)
 check_symbol_exists("waitpid"      "sys/wait.h" HAVE_WAITPID)
-check_symbol_exists("strtol"       "stdlib.h"   HAVE_STRTOL)
-check_symbol_exists("strtoul"      "stdlib.h"   HAVE_STRTOUL)
 check_symbol_exists("strncasecmp"  "strings.h"  HAVE_STRNCASECMP)
 check_symbol_exists("mkstemp"      "stdlib.h"   HAVE_MKSTEMP)
 check_symbol_exists("gettimeofday" "sys/time.h" HAVE_GETTOD)
@@ -48,6 +46,10 @@ check_symbol_exists("gettimeofday" "sys/time.h" HAVE_GETTOD)
 if (NOT HAVE_STRNCASECMP)
     check_library_exists("socket" "strncasecmp" "" HAVE_STRNCASECMP_IN_SOCKET)
     check_library_exists("inet"   "strncasecmp" "" HAVE_STRNCASECMP_IN_INET)
+    
+    if (HAVE_STRNCASECMP_IN_SOCKET OR HAVE_STRNCASECMP_IN_INET)
+        set(HAVE_STRNCASECMP TRUE CACHE BOOL "" FORCE)
+    endif ()
 endif ()
 
 check_type_size("((struct stat*)0)->st_blocks"  STRUCT_STAT_ST_BLOCKS)
@@ -76,16 +78,16 @@ target_compile_definitions(tcl_config INTERFACE
                            $<$<NOT:$<BOOL:${HAVE_SYS_WAIT_H}>>:NO_SYS_WAIT_H=1>
                            $<$<NOT:$<BOOL:${HAVE_VALUES_H}>>:NO_VALUES_H=1>
                            $<$<NOT:$<BOOL:${HAVE_DLFCN_H}>>:NO_DLFCN_H=1>
-                           $<$<NOT:$<BOOL:${HAVE_GETTOD}>>:GETTOD_NOT_DECLARED=1
-                           $<$<$<BOOL:${HAVE_STRUCT_STAT_ST_BLOCKS}>>:HAVE_STRUCT_STAT_ST_BLOCKS=1>
-                           $<$<$<BOOL:${HAVE_STRUCT_STAT_ST_BLKSIZE}>>:HAVE_STRUCT_STAT_ST_BLKSIZE=1>
+                           $<$<NOT:$<BOOL:${HAVE_GETTOD}>>:GETTOD_NOT_DECLARED=1>
+                           $<$<BOOL:${HAVE_STRUCT_STAT_ST_BLOCKS}>:HAVE_STRUCT_STAT_ST_BLOCKS=1>
+                           $<$<BOOL:${HAVE_STRUCT_STAT_ST_BLKSIZE}>:HAVE_STRUCT_STAT_ST_BLKSIZE=1>
                            $<$<BOOL:${HAVE_BLKCNT_T}>:HAVE_BLKCNT_T=1>
                            $<$<NOT:$<BOOL:${HAVE_MODE_T}>>:mode_t=int>
                            $<$<NOT:$<BOOL:${HAVE_PID_T}>>:pid_t=int>
                            $<$<NOT:$<BOOL:${HAVE_UID_T}>>:uid_t=int>
                            $<$<NOT:$<BOOL:${HAVE_GID_T}>>:gid_t=int>
                            $<$<NOT:$<BOOL:${HAVE_SIZE_T}>>:size_t=unsigned long>
-                           $<$<NOT:$<BOOL:${HAVE_SOCKLEN_T}>>:socklen_t=int>
+#                           $<$<NOT:$<BOOL:${HAVE_SOCKLEN_T}>>:socklen_t=int>
                            )
 
 target_include_directories(tcl_config INTERFACE
@@ -98,12 +100,10 @@ target_link_libraries(tcl_config INTERFACE
                       )
 
 target_sources(tcl_config INTERFACE 
-               $<$<NOT:$<BOOL:${HAVE_WAITPID}>:src/waitpid.c>
-               $<$<NOT:$<BOOL:${HAVE_STRTOL}>:src/strtol.c>
-               $<$<NOT:$<BOOL:${HAVE_STRTOUL}>:src/strtoul.c>
-               $<$<NOT:$<BOOL:${HAVE_STRNCASECMP}>:src/strncasecmp.c>
-               $<$<NOT:$<BOOL:${HAVE_MKSTEMP}>:src/mkstemp.c>
-               $<$<NOT:$<BOOL:${HAVE_GETTOD}>:src/gettod.c>
+               $<$<NOT:$<BOOL:${HAVE_WAITPID}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/waitpid.c>
+               $<$<NOT:$<BOOL:${HAVE_STRNCASECMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strncasecmp.c>
+               $<$<NOT:$<BOOL:${HAVE_MKSTEMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/mkstemp.c>
+               $<$<NOT:$<BOOL:${HAVE_GETTOD}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/gettod.c>
                )
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)

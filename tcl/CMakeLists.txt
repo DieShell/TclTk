@@ -23,28 +23,27 @@
 add_executable(tclsh)
 add_library(tcl     ${TCL_BUILD_TYPE})
 add_library(tclstub STATIC)
-add_library(tcl_dde SHARED)
-add_library(tcl_reg SHARED)
-
-# include directories
-add_library(tcl_public INTERFACE)
 
 # pseudo-target to contain the configuration settings
 add_library(tcl_config INTERFACE)
 
 # link all the things together
 target_link_libraries(tclsh PUBLIC tcl tclstub)
-if (TCL_BUILD_SHARED)
-    target_link_libraries(tcl_dde PRIVATE tclstub)
-    target_link_libraries(tcl_reg PRIVATE tclstub)
-endif ()
-target_link_libraries(tcl PUBLIC tcl_dde tcl_reg)
 
-target_link_libraries(tclsh   PUBLIC tcl_public tcl_config)
-target_link_libraries(tcl     PUBLIC tcl_public tcl_config)
-target_link_libraries(tclstub PUBLIC tcl_public tcl_config)
-target_link_libraries(tcl_reg PUBLIC tcl_public tcl_config)
-target_link_libraries(tcl_dde PUBLIC tcl_public tcl_config)
+target_link_libraries(tclsh   PUBLIC tcl_config)
+target_link_libraries(tcl     PUBLIC tcl_config)
+target_link_libraries(tclstub PUBLIC tcl_config)
+
+# proper output names
+set_target_properties(tclsh   PROPERTIES OUTPUT_NAME "tclsh${TCL_DOUBLE_VERSION}")
+set_target_properties(tcl     PROPERTIES 
+                              OUTPUT_NAME "tcl${TCL_DOUBLE_VERSION}"
+                              POSITION_INDEPENDENT_CODE TRUE
+                      )
+set_target_properties(tclstub PROPERTIES 
+                              OUTPUT_NAME "tclstub${TCL_DOUBLE_VERSION}"
+                              POSITION_INDEPENDENT_CODE TRUE
+                      )
 
 # Add tcltest if tests enabled
 if (TCL_ENABLE_TESTS)
@@ -54,25 +53,31 @@ if (TCL_ENABLE_TESTS)
     target_link_libraries(tcltest PUBLIC  tcl_public tcl_config 
                                   PRIVATE tcl_test
                           )
+
+    set_target_properties(tcl_test PROPERTIES OUTPUT_NAME "tcltest${TCL_DOUBLE_VERSION}")
+    set_target_properties(tcltest PROPERTIES OUTPUT_NAME "tcltest${TCL_DOUBLE_VERSION}") 
 endif ()
 
-# proper output names
-set_target_properties(tclsh   PROPERTIES OUTPUT_NAME "tclsh${TCL_DOUBLE_VERSION}")
-set_target_properties(tcl     PROPERTIES OUTPUT_NAME "tcl${TCL_DOUBLE_VERSION}"
-                                         PREFIX ""
-                      )
-set_target_properties(tclstub PROPERTIES OUTPUT_NAME "tclstub${TCL_DOUBLE_VERSION}")
-set_target_properties(tcl_dde PROPERTIES OUTPUT_NAME "tcldde${TCL_DDE_DOTLESS}"
-                                         PREFIX ""
-                      )
-set_target_properties(tcl_reg PROPERTIES OUTPUT_NAME "tclreg${TCL_REG_DOTLESS}"
-                                         PREFIX ""
-                      )
-if (TCL_ENABLE_TESTS)
-    set_target_properties(tcl_test PROPERTIES OUTPUT_NAME "tcltest${TCL_DOUBLE_VERSION}"
-                                              PREFIX ""
+# tcldde and tclreg are separate on Windows for reasons?
+if (WIN32)
+    add_library(tcl_dde SHARED)
+    add_library(tcl_reg SHARED)
+       
+    target_link_libraries(tcl_reg PUBLIC tcl_public tcl_config)
+    target_link_libraries(tcl_dde PUBLIC tcl_public tcl_config)
+    
+    if (TCL_BUILD_SHARED)
+        target_link_libraries(tcl_dde PRIVATE tclstub)
+        target_link_libraries(tcl_reg PRIVATE tclstub)
+    endif ()
+    target_link_libraries(tcl PUBLIC tcl_dde tcl_reg)
+    
+    set_target_properties(tcl_dde PROPERTIES OUTPUT_NAME "tcldde${TCL_DDE_DOTLESS}"
+                                             PREFIX ""
                           )
-    set_target_properties(tcltest PROPERTIES OUTPUT_NAME "tcltest${TCL_DOUBLE_VERSION}") 
+    set_target_properties(tcl_reg PROPERTIES OUTPUT_NAME "tclreg${TCL_REG_DOTLESS}"
+                                             PREFIX ""
+                          )
 endif ()
 
 ## Compatibility sources #######################################################
@@ -88,7 +93,6 @@ if (WIN32)
     add_subdirectory(lib/win32_backend)
 else ()
     if (APPLE)
-        message(FATAL_ERROR "WIP. Not implemented. Sorry.")
         add_subdirectory(lib/macos_backend)
     endif ()
 
@@ -102,7 +106,6 @@ else ()
             can help you.]])
     endif ()
 
-    message(FATAL_ERROR "WIP. Not implemented. Sorry.")
     add_subdirectory(lib/unix_backend)
 endif ()
 
@@ -114,10 +117,14 @@ if (TCL_ENABLE_INSTALL)
             RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
             ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
             )
-    install(TARGETS tcl_reg
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
-            )
-    install(TARGETS tcl_dde
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/dde${TCL_DDE_VERSION}"
-            )
+    if (TARGET tcl_reg)
+        install(TARGETS tcl_reg
+                DESTINATION "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
+                )
+    endif ()
+    if (TARGET tcl_dde)
+        install(TARGETS tcl_dde
+                DESTINATION "${CMAKE_INSTALL_LIBDIR}/dde${TCL_DDE_VERSION}"
+                )
+    endif ()
 endif ()

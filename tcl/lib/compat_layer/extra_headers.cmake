@@ -29,7 +29,7 @@ check_include_file("memory.h"    HAVE_MEMORY_H)
 check_include_file("strings.h"   HAVE_STRINGS_H)
 check_include_file("sys/stat.h"  HAVE_SYS_STAT_H)
 check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
-check_include_file("sys/time.h" HAVE_SYS_TIME_H)
+check_include_file("sys/time.h"  HAVE_SYS_TIME_H)
 check_include_file("sys/param.h" HAVE_SYS_PARAM_H)
 check_include_file("inttypes.h"  HAVE_INTTYPES_H)
 
@@ -45,6 +45,6 @@ target_compile_definitions(tcl_config INTERFACE
                            $<$<BOOL:${HAVE_SYS_STAT_H}>:HAVE_SYS_STAT_H=1>
                            $<$<BOOL:${HAVE_SYS_TIME_H}>:HAVE_SYS_TIME_H=1>
                            $<$<BOOL:${HAVE_SYS_PARAM_H}>:HAVE_SYS_PARAM_H=1>
-                           $<$<BOOL:${HAVE_INTTYPES_H}>:HAVE_INTTYPES_H>
+                           $<$<BOOL:${HAVE_INTTYPES_H}>:HAVE_INTTYPES_H=1>
                            )
 

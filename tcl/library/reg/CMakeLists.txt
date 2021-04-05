@@ -18,8 +18,10 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
-install(FILES
-        "${CMAKE_CURRENT_SOURCE_DIR}/pkgIndex.tcl"
-        DESTINATION
-        "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
-        )
+if (TARGET tcl_reg)
+    install(FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/pkgIndex.tcl"
+            DESTINATION
+            "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
+            )
+endif ()

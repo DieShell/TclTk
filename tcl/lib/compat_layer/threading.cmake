@@ -18,7 +18,7 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
-if (NOT TCL_ENABLE_THREAD)
+if (NOT TCL_ENABLE_THREADS)
     return ()
 endif ()
 
