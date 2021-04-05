@@ -58,19 +58,19 @@ check_include_file("sys/select.h" HAVE_SYS_SELECT_H)
 check_include_file("net/errno.h"  HAVE_NET_ERRNO_H)
 check_include_file("fts.h"        HAVE_FTS_H)
 
-check_symbol_exists("getcwd"       "unistd.h"                HAVE_GETCWD)
-check_symbol_exists("getwd"        "unistd.h"                HAVE_GETWD)
-check_symbol_exists("strerror"     "string.h"                HAVE_STRERROR)
-check_symbol_exists("uname"        "sys/utsname.h"           HAVE_UNAME)
-check_symbol_exists("wait3"        "sys/wait.h"              HAVE_WAIT3)
-check_symbol_exists("realpath"     "stdlib.h"                HAVE_REALPATH)
-check_symbol_exists("gmtime_r"     "sys/types.h;time.h"      HAVE_GMTIME_R)
-check_symbol_exists("localtime_r"  "sys/types.h;time.h"      HAVE_LOCALTIME_R)
-check_symbol_exists("mktime"       "sys/types.h;time.h"      HAVE_MKTIME)
-check_symbol_exists("fstatfs"      "sys/types.h;sys/mount.h" HAVE_FSTATFS)
-check_symbol_exists("mkstemps"     "stdlib.h"                HAVE_MKSTEMPS)
-check_symbol_exists("chflags"      "sys/stat.h"              HAVE_CHFLAGS)
-check_symbol_exists("isnan"        "math.h"                  HAVE_ISNAN)
+check_symbol_exists("getcwd"       "unistd.h"           HAVE_GETCWD)
+check_symbol_exists("getwd"        "unistd.h"           HAVE_GETWD)
+check_symbol_exists("strerror"     "string.h"           HAVE_STRERROR)
+check_symbol_exists("uname"        "sys/utsname.h"      HAVE_UNAME)
+check_symbol_exists("wait3"        "sys/wait.h"         HAVE_WAIT3)
+check_symbol_exists("realpath"     "stdlib.h"           HAVE_REALPATH)
+check_symbol_exists("gmtime_r"     "sys/types.h;time.h" HAVE_GMTIME_R)
+check_symbol_exists("localtime_r"  "sys/types.h;time.h" HAVE_LOCALTIME_R)
+check_symbol_exists("mktime"       "sys/types.h;time.h" HAVE_MKTIME)
+check_symbol_exists("fstatfs"      "sys/statfs.h" 	HAVE_FSTATFS)
+check_symbol_exists("mkstemps"     "stdlib.h"           HAVE_MKSTEMPS)
+check_symbol_exists("chflags"      "sys/stat.h"         HAVE_CHFLAGS)
+check_symbol_exists("isnan"        "math.h"             HAVE_ISNAN)
 
 check_type_size("((struct tm*)0)->tm_tzajd"  TM_TZADJ)
 check_type_size("((struct tm*)0)->tm_gmtoff" TM_GMTOFF)
@@ -224,12 +224,6 @@ target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix>
                            )
-set_source_files_properties(src/tclUnixInit.c
-                            TARGET_DIRECTORY tcl
-                            PROPERTIES
-                                COMPILE_DEFINITIONS 
-                                "TCL_LIBRARY=\"${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}\";TCL_PACKAGE_PATH=\"{${CMAKE_INSTALL_LIBDIR}}\""
-                            )
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES

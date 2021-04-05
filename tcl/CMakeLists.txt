@@ -112,6 +112,19 @@ endif ()
 add_subdirectory(pkgs)
 add_subdirectory(library)
 
+## Package Configs
+# CMake is stupid, and so is passing every config flag
+# one the command line but I don't care at this point
+set_source_files_properties(lib/common/src/tclPkgConfig.c 
+                            PROPERTIES 
+			    	COMPILE_DEFINITIONS "${PKG_CONFIG_LIST}"
+                            )
+
+set_source_files_properties(lib/unix_backend/src/tclUnixInit.c
+                            PROPERTIES
+                                COMPILE_DEFINITIONS 
+                                "TCL_LIBRARY=\"${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}\";TCL_PACKAGE_PATH=\"{${CMAKE_INSTALL_LIBDIR}}\""
+                            )
 if (TCL_ENABLE_INSTALL)
     install(TARGETS tcl tclsh tclstub 
             RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"

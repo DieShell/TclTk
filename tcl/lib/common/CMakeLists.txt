@@ -147,8 +147,8 @@ target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic>
                            )
-
-set(CFG_LIST 
+		   
+set(PKG_CONFIG_LIST 
     "CFG_INSTALL_LIBDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\""
     "CFG_INSTALL_BINDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\""
     "CFG_INSTALL_SCRDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}\""
@@ -159,12 +159,7 @@ set(CFG_LIST
     "CFG_RUNTIME_SCRDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}\""
     "CFG_RUNTIME_INCDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}\""
     "CFG_RUNTIME_DOCDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_MANDIR}\""
-    )
-set_source_files_properties(src/tclPkgConfig.c 
-                            TARGET_DIRECTORY tcl
-                            PROPERTIES 
-                                COMPILE_DEFINITIONS "${CFG_LIST}"
-                            )
+    CACHE INTERNAL "")
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES 
