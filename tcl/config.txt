@@ -1,0 +1,22 @@
+common:
+    inline
+
++macos:
+    NO_REALPATH=1
+    HAVE_COREFOUNDATION             CoreFoundation/CoreFoundation.h
+    HAVE_LIBKERN_OSATOMIC_H
+        HAVE_OSSPINLOCKLOCK         fn:OSSpinLockLock
+    |HAVE_SYS_ATTR_H
+    |HAVE_SYS_PATHS_H
+    |HAVE_LIBKERN_OSBYTEORDER_H
+        HAVE_GETATTRLIST            fn:getattrlist
+    HAVE_COPYFILE_H
+    HAVE_COPYFILE                   fn:copyfile
+    HAVE_AVAILABILITYMACROS_H
+        HAVE_WEAK_IMPORT            __attribute__((weak_import)) -Werror compiles
+    _DARWIN_C_SOURCE                try_compile:591
+    USE_VFORK=1
+    TCL_DEFAULT_ENCODING="utf-8"
+    TCL_LOAD_FROM_MEMROY=1
+    TCL_WIDE_CLICKS=1
+
