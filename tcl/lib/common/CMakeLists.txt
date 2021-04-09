@@ -1,9 +1,9 @@
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -101,14 +101,10 @@ target_sources(tcl PRIVATE
         src/tclStringTrim.h
                             src/tclStrToD.c
                             src/tclStubInit.c
-                            #src/tclTest.c
-                            #src/tclTestObj.c
-                            #src/tclTestProcBodyObj.c
                             src/tclThread.c
                             src/tclThreadAlloc.c
                             src/tclThreadJoin.c
                             src/tclThreadStorage.c
-                            #src/tclThreadTest.c
                             src/tclTimer.c
            src/tclTomMath.h
       src/tclTomMathDecls.h
@@ -135,8 +131,16 @@ target_sources(tclstub PRIVATE
                src/tclOOStubLib.c
                src/tclTomMathStubLib.c
                )
+if (TARGET tcltest)
+    target_sources(tcltest PRIVATE
+                   src/tclTest.c
+                   src/tclTestObj.c
+                   src/tclTestProcBodyObj.c
+                   src/tclThreadTest.c
+                   )
+endif ()
 
-target_compile_definitions(tcl_config INTERFACE 
+target_compile_definitions(tcl_config INTERFACE
                            BUILD_tcl=1
                            MODULE_SCOPE=extern
                            $<$<BOOL:${TCL_ENABLE_UNLOAD_DLLS}>:TCL_UNLOAD_DLLS=1>
@@ -147,8 +151,8 @@ target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic>
                            )
-		   
-set(PKG_CONFIG_LIST 
+
+set(PKG_CONFIG_LIST
     "CFG_INSTALL_LIBDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\""
     "CFG_INSTALL_BINDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\""
     "CFG_INSTALL_SCRDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}\""
@@ -162,19 +166,18 @@ set(PKG_CONFIG_LIST
     CACHE INTERNAL "")
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES 
+    install(FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tcl.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclDecls.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOO.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOODecls.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclPlatDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclThread.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMath.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMathDecls.h"
             DESTINATION
             "${CMAKE_INSTALL_INCLUDEDIR}"
             )
-    install(FILES 
+    install(FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tcl.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclDecls.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclFileSystem.h"
@@ -192,7 +195,6 @@ if (TCL_ENABLE_INSTALL_DEVELOPMENT)
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclRegexp.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclStringRep.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclStringTrim.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclThread.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMath.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMathDecls.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMathInt.h"

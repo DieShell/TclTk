@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -24,18 +24,9 @@ project(TEA-TDBC-PostgreSQL
         )
 
 ## Options #####################################################################
-option(TEA_TDBC_MYSQL_ENABLE_THREADS 
-       "Enable the use of threads in TEA TDBC_MYSQL [${TEA_USE_THREADS}]" "${TEA_USE_THREADS}"
+option(TEA_TDBC_POSTGRES_ENABLE_TESTS
+       "Enable running tests for the TDBC PostgreSQL connector [Off]" Off
        )
-
-# Option integrity checks
-if (NOT TEA_TDBC_MYSQL_ENABLE_THREADS
-    AND TCL_ENABLE_THREADS)
-        message(SEND_ERROR 
-"A non-threaded extension may only run in a non-threaded Tcl core.
-Reconfigure with TCL_ENABLE_THREADS=0, or TEA_SQLITE_ENABLE_THREADS=1"
-            )
-endif ()
 
 ## System checks ###############################################################
 cmake_push_check_state(RESET)
@@ -53,7 +44,7 @@ add_library(tea_tdbc_pq SHARED
             src/pqStubs.h
             )
 
-target_compile_definitions(tea_tdbc_pq PRIVATE                           
+target_compile_definitions(tea_tdbc_pq PRIVATE
                            BUILD_tdbcpostgres=1
                            USE_TCL_STUBS=1
                            USE_TCLOO_STUBS=1
@@ -77,10 +68,10 @@ check_intptr_type(tea_tdbc_pq "uintptr_t"
                   FALLBACK "unsigned" "unsinged long" "unsigned long long"
                   )
 
-string(REPLACE "." "" TDBC_MYSQL_DOTLESS_VERSION "${TDBC_VERSION}")
+string(REPLACE "." "" TDBC_PQ_DOTLESS_VERSION "${TDBC_VERSION}")
 set_target_properties(tea_tdbc_pq PROPERTIES
                       PREFIX ""
-                      OUTPUT_NAME "tdbcpostgres${TDBC_MYSQL_DOTLESS_VERSION}"
+                      OUTPUT_NAME "tdbcpostgres${TDBC_PQ_DOTLESS_VERSION}"
                       )
 
 ## Configuration ###############################################################
@@ -88,21 +79,32 @@ set(TCL_VERSION_REQ     "8.6")
 set(TCLOO_VERSION_REQ   "1.0")
 set(PACKAGE_NAME        "tdbcpostgres")
 set(PACKAGE_VERSION     "${TDBC_VERSION}")
-set(PKG_LIB_FILE        "tdbcpq${TDBC_MYSQL_DOTLESS_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+set(PKG_LIB_FILE        "tdbcpostgres${TDBC_PQ_DOTLESS_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
 configure_file(pkgIndex.tcl.in
                pkgIndex.tcl
                @ONLY
                )
+
+## Tests #######################################################################
+add_subdirectory(tests)
 
 ## Install #####################################################################
 if (TCL_ENABLE_INSTALL)
     install(TARGETS tea_tdbc_pq
             DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
             )
-    install(FILES 
+    install(FILES
             "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcpostgres.tcl" 
+            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcpostgres.tcl"
             DESTINATION
             "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
+            )
+endif ()
+if (TCL_ENABLE_INSTALL_DEVELOPMENT)
+    install(FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/fakepq.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/pqStubs.h"
+            DESTINATION
+            "${CMAKE_INSTALL_INCLUDEDIR}"
             )
 endif ()

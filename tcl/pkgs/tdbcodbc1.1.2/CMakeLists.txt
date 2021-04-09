@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -24,14 +24,18 @@ project(TEA-TDBC-ODBC
         )
 
 ## Options #####################################################################
-option(TEA_TDBC_ODBC_ENABLE_THREADS 
+option(TEA_TDBC_ODBC_ENABLE_THREADS
        "Enable the use of threads in TEA TDBC_ODBC [${TEA_USE_THREADS}]" "${TEA_USE_THREADS}"
+       )
+
+option(TEA_TDBC_ODBC_ENABLE_TESTS
+       "Enable running tests for the TDBC ODBC connector [On]" On
        )
 
 # Option integrity checks
 if (NOT TEA_TDBC_ODBC_ENABLE_THREADS
     AND TCL_ENABLE_THREADS)
-        message(SEND_ERROR 
+        message(SEND_ERROR
 "A non-threaded extension may only run in a non-threaded Tcl core.
 Reconfigure with TCL_ENABLE_THREADS=0, or TEA_SQLITE_ENABLE_THREADS=1"
             )
@@ -53,7 +57,7 @@ add_library(tea_tdbc_odbc SHARED
             src/odbcStubs.h
             )
 
-target_compile_definitions(tea_tdbc_odbc PRIVATE                           
+target_compile_definitions(tea_tdbc_odbc PRIVATE
                            BUILD_tdbcodbc=1
                            USE_TCL_STUBS=1
                            USE_TCLOO_STUBS=1
@@ -95,15 +99,26 @@ configure_file(pkgIndex.tcl.in
                @ONLY
                )
 
+## Tests #######################################################################
+add_subdirectory(tests)
+
 ## Install #####################################################################
 if (TCL_ENABLE_INSTALL)
     install(TARGETS tea_tdbc_odbc
             DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
             )
-    install(FILES 
+    install(FILES
             "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcodbc.tcl" 
+            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcodbc.tcl"
             DESTINATION
             "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
+            )
+endif ()
+if (TCL_ENABLE_INSTALL_DEVELOPMENT)
+    install(FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/fakesql.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/odbcStubs.h"
+            DESTINATION
+            "${CMAKE_INSTALL_INCLUDEDIR}"
             )
 endif ()

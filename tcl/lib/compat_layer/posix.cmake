@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -46,7 +46,7 @@ check_symbol_exists("gettimeofday" "sys/time.h" HAVE_GETTOD)
 if (NOT HAVE_STRNCASECMP)
     check_library_exists("socket" "strncasecmp" "" HAVE_STRNCASECMP_IN_SOCKET)
     check_library_exists("inet"   "strncasecmp" "" HAVE_STRNCASECMP_IN_INET)
-    
+
     if (HAVE_STRNCASECMP_IN_SOCKET OR HAVE_STRNCASECMP_IN_INET)
         set(HAVE_STRNCASECMP TRUE CACHE BOOL "" FORCE)
     endif ()
@@ -60,6 +60,9 @@ check_type_size("pid_t"                         PID_T)
 check_type_size("size_t"                        SIZE_T)
 check_type_size("uid_t"                         UID_T)
 check_type_size("gid_t"                         GID_T)
+if (HAVE_SYS_SOCKET_H)
+    list(APPEND CMAKE_EXTRA_INCLUDE_FILES "sys/socket.h")
+endif ()
 check_type_size("socklen_t"                     SOCKLEN_T)
 # idk if this is POSIX
 list(APPEND CMAKE_EXTRA_INCLUDE_FILES "sys/stat.h")
@@ -87,19 +90,19 @@ target_compile_definitions(tcl_config INTERFACE
                            $<$<NOT:$<BOOL:${HAVE_UID_T}>>:uid_t=int>
                            $<$<NOT:$<BOOL:${HAVE_GID_T}>>:gid_t=int>
                            $<$<NOT:$<BOOL:${HAVE_SIZE_T}>>:size_t=unsigned long>
-#                           $<$<NOT:$<BOOL:${HAVE_SOCKLEN_T}>>:socklen_t=int>
+                           $<$<NOT:$<BOOL:${HAVE_SOCKLEN_T}>>:socklen_t=int>
                            )
 
 target_include_directories(tcl_config INTERFACE
                            $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/unistd>>
                            $<$<NOT:$<BOOL:${HAVE_UNISTD_H}>>:$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic>>
                            )
-target_link_libraries(tcl_config INTERFACE 
+target_link_libraries(tcl_config INTERFACE
                       $<$<BOOL:${HAVE_STRNCASECMP_IN_SOCKET}>:socket>
                       $<$<BOOL:${HAVE_STRNCASECMP_IN_INET}>:inet>
                       )
 
-target_sources(tcl_config INTERFACE 
+target_sources(tcl_config INTERFACE
                $<$<NOT:$<BOOL:${HAVE_WAITPID}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/waitpid.c>
                $<$<NOT:$<BOOL:${HAVE_STRNCASECMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strncasecmp.c>
                $<$<NOT:$<BOOL:${HAVE_MKSTEMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/mkstemp.c>

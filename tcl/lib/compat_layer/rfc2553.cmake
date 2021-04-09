@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -18,7 +18,7 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
-## This file handles if sys/types.h, sys/socket.h, and/or netdb.h define 
+## This file handles if sys/types.h, sys/socket.h, and/or netdb.h define
 # the following
 # types: sockaddr_storage, in6_addr, sockaddr_in6, addrinfo; and
 # functions: getaddrinfo, gai_strerror, freeaddrinfo, getnameinfo
@@ -50,7 +50,7 @@ check_type_size("struct sockaddr_storage" STRUCT_SOCKADDR_STORAGE)
 check_type_size("struct in6_addr"         STRUCT_IN6_ADDR)
 check_type_size("struct sockaddr_in6"     STRUCT_SOCKADDR_IN6)
 check_type_size("struct addrinfo"         STRUCT_ADDRINFO)
-if (HAVE_STRUCT_ADDRINFO 
+if (HAVE_STRUCT_ADDRINFO
     AND HAVE_STRUCT_IN6_ADDR
     AND HAVE_STRUCT_SOCKADDR_IN6
     AND HAVE_STRUCT_SOCKADDR_STORAGE)
@@ -84,18 +84,18 @@ endif ()
 ## Target ######################################################################
 target_include_directories(tcl_config PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/rfc2553>
-                           $<INSTALL_INTERFACE:include>
+                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic>
                            )
-target_compile_definitions(tcl_config PUBLIC 
-                           NEED_FAKE_RFC2553
+target_compile_definitions(tcl_config PUBLIC
+                           NEED_FAKE_RFC2553=1
                            )
 
 target_sources(tcl_config PRIVATE src/rfc2553/fake-rfc2553.c)
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES 
+    install(FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/rfc2553/compat/fake-rfc2553.h"
             DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}/compat"
+            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
             )
 endif ()

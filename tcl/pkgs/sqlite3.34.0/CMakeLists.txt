@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -21,27 +21,27 @@
 file(STRINGS "src/compat/sqlite3/sqlite3.h" SQLITE3_H_VERSION_LINE
      REGEX [[SQLITE_VERSION]]
      )
- string(REGEX REPLACE [[.*"([0-9]+\.[0-9]+\.[0-9]+)".*]] "\\1" SQLITE_VERSION
-        "${SQLITE3_H_VERSION_LINE}"
-        )
-project(TEA-SQLite 
+string(REGEX REPLACE [[.*"([0-9]+\.[0-9]+\.[0-9]+)".*]] "\\1" SQLITE_VERSION
+       "${SQLITE3_H_VERSION_LINE}"
+       )
+project(TEA-SQLite
         VERSION ${SQLITE_VERSION}
         LANGUAGES C
         )
 
 ## Options #####################################################################
-option(TEA_SQLITE_ENABLE_THREADS 
+option(TEA_SQLITE_ENABLE_THREADS
        "Enable the use of threads in TEA SQLite [${TEA_USE_THREADS}]" "${TEA_USE_THREADS}"
        )
-option(TEA_SQLITE_BUILD_SHARED 
+option(TEA_SQLITE_BUILD_SHARED
        "Build TEA SQLite as a shared library [On]" On
        )
 
 # Option integrity checks
 if (NOT TEA_SQLITE_ENABLE_THREADS
     AND TCL_ENABLE_THREADS)
-        message(SEND_ERROR 
-"A non-threaded extension may only run in a non-threaded Tcl core.
+    message(SEND_ERROR
+            "A non-threaded extension may only run in a non-threaded Tcl core.
 Reconfigure with TCL_ENABLE_THREADS=0, or TEA_SQLITE_ENABLE_THREADS=1"
             )
 endif ()
@@ -59,27 +59,27 @@ endif ()
 cmake_push_check_state(RESET)
 check_include_file("malloc.h" HAVE_MALLOC_H)
 
-check_symbol_exists(fdatasync   "unistd.h"            HAVE_FDATASYNC)
-check_symbol_exists(usleep      "unistd.h"            HAVE_USLEEP)
-check_symbol_exists(localtime_r "sys/types.h;time.h"  HAVE_LOCALTIME_R)
-check_symbol_exists(localtime_s "time.h"              HAVE_LOCALTIME_S)
-check_symbol_exists(gmtime_r    "sys/types.h;time.h"  HAVE_GMTIME_R)
+check_symbol_exists(fdatasync "unistd.h" HAVE_FDATASYNC)
+check_symbol_exists(usleep "unistd.h" HAVE_USLEEP)
+check_symbol_exists(localtime_r "sys/types.h;time.h" HAVE_LOCALTIME_R)
+check_symbol_exists(localtime_s "time.h" HAVE_LOCALTIME_S)
+check_symbol_exists(gmtime_r "sys/types.h;time.h" HAVE_GMTIME_R)
 check_symbol_exists(malloc_usable_size
-                                "malloc.h"            HAVE_MALLOC_USABLE_SIZE)
-check_symbol_exists(utime       "sys/types.h;utime.h" HAVE_UTIME)
-check_symbol_exists(flock       "fcntl.h"             HAVE_FLOCK)
-check_symbol_exists(readlink    "unistd.h"            HAVE_READLINK)
-check_symbol_exists(lstat       "sys/stat.h"          HAVE_LSTAT)
-check_symbol_exists(pread       "unistd.h"            HAVE_PREAD)
-check_symbol_exists(pread64     "unistd.h"            HAVE_PREAD64)
-check_symbol_exists(pwrite      "unistd.h"            HAVE_PWRITE)
-check_symbol_exists(pwrite64    "unistd.h"            HAVE_PWRITE64)
+                    "malloc.h" HAVE_MALLOC_USABLE_SIZE)
+check_symbol_exists(utime "sys/types.h;utime.h" HAVE_UTIME)
+check_symbol_exists(flock "fcntl.h" HAVE_FLOCK)
+check_symbol_exists(readlink "unistd.h" HAVE_READLINK)
+check_symbol_exists(lstat "sys/stat.h" HAVE_LSTAT)
+check_symbol_exists(pread "unistd.h" HAVE_PREAD)
+check_symbol_exists(pread64 "unistd.h" HAVE_PREAD64)
+check_symbol_exists(pwrite "unistd.h" HAVE_PWRITE)
+check_symbol_exists(pwrite64 "unistd.h" HAVE_PWRITE64)
 list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_GNU_SOURCE=1")
-check_symbol_exists(strchrnul   "string.h"            HAVE_STRCHRNUL)
+check_symbol_exists(strchrnul "string.h" HAVE_STRCHRNUL)
 list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_CRT_RAND_S=1")
-check_symbol_exists(rand_s      "stdlib.h"            HAVE_RAND_S)
+check_symbol_exists(rand_s "stdlib.h" HAVE_RAND_S)
 
-check_symbol_exists(strerror_r  "string.h"            HAVE_DECL_STRERROR_R)
+check_symbol_exists(strerror_r "string.h" HAVE_DECL_STRERROR_R)
 if (HAVE_DECL_STRERROR_R)
     check_c_source_compiles([[
 #include <string.h>
@@ -97,7 +97,7 @@ add_library(tea_sqlite "${TEA_SQLITE_BUILD_TYPE}"
             src/tclsqlite3.c
             )
 
-target_compile_definitions(tea_sqlite PRIVATE 
+target_compile_definitions(tea_sqlite PRIVATE
                            BUILD_sqlite=1
                            USE_TCL_STUBS=1
                            SQLITE_ENABLE_DBPAGE_VTAB=1
@@ -142,7 +142,7 @@ target_compile_definitions(tea_sqlite PRIVATE
                            $<$<BOOL:${STRERROR_R_CHAR_P}>:STRERROR_R_CHAR_P=1>
                            )
 
-target_link_libraries(tea_sqlite PRIVATE 
+target_link_libraries(tea_sqlite PRIVATE
                       tclstub
                       )
 
@@ -160,12 +160,19 @@ configure_file(pkgIndex.tcl.in
                @ONLY
                )
 
+## Tests #######################################################################
+add_subdirectory(tests)
+
 ## Install #####################################################################
 if (TCL_ENABLE_INSTALL)
     install(TARGETS tea_sqlite
             DESTINATION "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
             )
-    install(FILES 
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/spaceanal.tcl"
+            RENAME sqlite3_analyzer
+            DESTINATION "${CMAKE_INSTALL_BINDIR}"
+            )
+    install(FILES
             "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
             DESTINATION
             "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"

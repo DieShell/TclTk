@@ -19,25 +19,13 @@
 # 3. This notice may not be removed or altered from any source distribution.
 
 ## Tests #######################################################################
-# custom_target for encoding because file() cannot copy directories
 if (TCL_ENABLE_TESTS)
-    add_custom_command(OUTPUT "${TCL_TEST_LIBRARY}/encoding/ascii.enc"
-                       MAIN_DEPENDENCY ascii.enc
-                       COMMENT "Copying encodings for tcltest"
-                       COMMAND
-                       "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}"
-                                                            "${TCL_TEST_LIBRARY}/encoding"
-                       )
-
-    add_custom_target(TclTest-Encodings ALL
-                      DEPENDS "${TCL_TEST_LIBRARY}/encoding/ascii.enc"
-                      )
+    configure_file(tcltests.tcl
+                   "${TCL_TEST_LIBRARY}/tcltests/tcltests.tcl"
+                   COPYONLY
+                   )
+    configure_file(pkgIndex.tcl
+                   "${TCL_TEST_LIBRARY}/tcltests/pkgIndex.tcl"
+                   COPYONLY
+                   )
 endif ()
-
-## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(DIRECTORY .
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}/encoding"
-            PATTERN "CMakeLists.txt" EXCLUDE
-            )
-endif()

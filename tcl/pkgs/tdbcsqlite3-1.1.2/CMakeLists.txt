@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -23,6 +23,11 @@ project(TEA-TDBC-SQLite
         LANGUAGES NONE
         )
 
+## Options #####################################################################
+option(TEA_TDBC_SQLITE_ENABLE_TESTS
+       "Enable running tests for the TDBC PostgreSQL connector [Off]" Off
+       )
+
 ## Configuration ###############################################################
 set(PACKAGE_VERSION "${TDBC_VERSION}")
 configure_file(pkgIndex.tcl.in
@@ -30,12 +35,13 @@ configure_file(pkgIndex.tcl.in
                @ONLY
                )
 
+## Tests #######################################################################
+add_subdirectory(tests)
+
 ## Install #####################################################################
 if (TCL_ENABLE_INSTALL)
-    install(FILES 
-            "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcsqlite3.tcl" 
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/tdbcsqlite3-${TDBC_VERSION}"
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcsqlite3.tcl"
+            RENAME "sqlite3-${TDBC_VERSION}.tm"
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/${TCL_VERSION}/tdbc/"
             )
 endif ()

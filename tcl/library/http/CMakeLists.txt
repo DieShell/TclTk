@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -21,15 +21,23 @@
 file(STRINGS http.tcl HTTP_VERSION_LINE
      REGEX [[package provide http [0-9]+\.[0-9]+\.[0-9]+]]
      )
- string(REGEX REPLACE 
-        [[.*([0-9]+\.[0-9]+\.[0-9]+).*]] "\\1"
-        HTTP_TCL_VERSION "${HTTP_VERSION_LINE}"
-        )
+string(REGEX REPLACE
+       [[.*([0-9]+\.[0-9]+\.[0-9]+).*]] "\\1"
+       HTTP_TCL_VERSION "${HTTP_VERSION_LINE}"
+       )
 
-install(FILES
-        "${CMAKE_CURRENT_SOURCE_DIR}/http.tcl"
-        RENAME
-        "http-${HTTP_TCL_VERSION}.tm"
-        DESTINATION
-        "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/8.6/"
-        )
+## Tests #######################################################################
+if (TCL_ENABLE_TESTS)
+    configure_file(http.tcl
+                   "${TCL8_TEST_LIBRARY}/8.6/http-${HTTP_TCL_VERSION}.tm"
+                   COPYONLY
+                   )
+endif ()
+
+## Install #####################################################################
+if (TCL_ENABLE_INSTALL)
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/http.tcl"
+            RENAME "http-${HTTP_TCL_VERSION}.tm"
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/8.6/"
+            )
+endif ()

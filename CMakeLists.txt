@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -40,6 +40,7 @@ include(CheckTypeSize)
 include(CheckFunctionExists)
 include(CheckSymbolExists)
 include(CheckLibraryExists)
+include(CheckStructHasMember)
 include(CheckCSourceCompiles)
 include(CMakePushCheckState)
 include(TestBigEndian)
@@ -58,13 +59,13 @@ if (HAVE_M)
 endif ()
 
 ## Options #####################################################################
-option(TCL_ENABLE_INSTALL 
+option(TCL_ENABLE_INSTALL
        "Enable the Tcl runtime install target [On]" On
        )
 option(TCL_ENABLE_INSTALL_DEVELOPMENT
        "Enable install Tcl's development required files [Off]" Off
        )
-option(TCL_BUILD_SHARED 
+option(TCL_BUILD_SHARED
        "Build Tcl's libtcl as a shared library [On]" On
        )
 option(TCL_ENABLE_TK
@@ -83,6 +84,9 @@ option(TCL_ENABLE_UNLOAD_DLLS
        )
 option(TCL_ENABLE_THREADS
        "Enable Tcl's multi-threading support [On]" On
+       )
+option(TCL_ENABLE_TESTS
+       "Enable tests using the tcltest driver [On]" On
        )
 if (TCL_ENABLE_INSTALL)
     set(TCL_INSTALL_TZDATA "auto" CACHE STRING
@@ -103,8 +107,8 @@ endif ()
 
 if (NOT DEFINED TCL_INSTALL_TIMEZONE)
     if (TCL_INSTALL_TZDATA STREQUAL "auto")
-        foreach (dir "/usr/share/zoneinfo" 
-                     "/usr/share/lib/zoneinfo"  
+        foreach (dir "/usr/share/zoneinfo"
+                     "/usr/share/lib/zoneinfo"
                      "/usr/lib/zoneinfo")
             if ((EXISTS "${dir}/UTC")
                 OR (EXISTS "${dir}/GMT"))
@@ -147,6 +151,17 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT
    AND CMAKE_INSTALL_PREFIX MATCHES [[C:/Program Files( \(x86\))?]])
    set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}\\Tcl" CACHE PATH "..." FORCE)
 endif()
+
+## CTest support ###############################################################
+# CTest needs to be included into the top-level CMakeLists.txt to be allowed
+# to call ctest from the build directory
+# Also this needs to happen before calling any add_test()
+if (TCL_ENABLE_TESTS)
+    message(STATUS "Enabling test support")
+    set(TCL_TEST_LIBRARY "${CMAKE_BINARY_DIR}/lib/tcl${TCL_VERSION}" CACHE INTERNAL "")
+    set(TCL8_TEST_LIBRARY "${CMAKE_BINARY_DIR}/lib/tcl${TCL_MAJOR_VERSION}" CACHE INTERNAL "")
+    include(CTest)
+endif ()
 
 ## Tcl #########################################################################
 add_subdirectory(tcl)

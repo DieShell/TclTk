@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -24,9 +24,13 @@ endif ()
 
 find_package(Threads)
 if (Threads_FOUND)
-    target_compile_definitions(tcl_config INTERFACE 
+    target_compile_definitions(tcl_config INTERFACE
                                TCL_THREADS=1
                                USE_THREAD_ALLOC=1
                                )
     target_link_libraries(tcl_config INTERFACE Threads::Threads)
+else ()
+    message(WARNING [[Threading support was requested (TCL_ENABLE_THREADS defaults to on),
+but the system doesn't seem to have a compatible threading API. Thenceforth, no threading
+support will be enabled in Tcl.]])
 endif ()

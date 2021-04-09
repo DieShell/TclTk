@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -32,18 +32,23 @@ target_sources(tcl PRIVATE
                src/tclUnixPipe.c
                src/tclUnixPort.h
                src/tclUnixSock.c
-               #src/tclUnixTest.c
-               src/tclUnixThrd.c src/tclUnixThrd.h
+               src/tclUnixThrd.c
                src/tclUnixTime.c
                src/tclXtNotify.c
-               #src/tclXtTest.c
                )
 target_sources(tclsh PRIVATE
                src/tclAppInit.c
                )
+if (TARGET tcltest)
+    target_sources(tcltest PRIVATE
+                   src/tclAppInit.c
+                   src/tclUnixTest.c
+                   src/tclXtTest.c
+                   )
+endif ()
 
 ## Options #####################################################################
-set(TCL_WITH_ENCODING "iso8895-1" CACHE STRING 
+set(TCL_WITH_ENCODING "iso8895-1" CACHE STRING
     "The encoding to use (--with-encoding=) [iso8895-1]"
     )
 
@@ -67,13 +72,14 @@ check_symbol_exists("realpath"     "stdlib.h"           HAVE_REALPATH)
 check_symbol_exists("gmtime_r"     "sys/types.h;time.h" HAVE_GMTIME_R)
 check_symbol_exists("localtime_r"  "sys/types.h;time.h" HAVE_LOCALTIME_R)
 check_symbol_exists("mktime"       "sys/types.h;time.h" HAVE_MKTIME)
-check_symbol_exists("fstatfs"      "sys/statfs.h" 	HAVE_FSTATFS)
+check_symbol_exists("fstatfs"      "sys/statfs.h"       HAVE_FSTATFS)
 check_symbol_exists("mkstemps"     "stdlib.h"           HAVE_MKSTEMPS)
 check_symbol_exists("chflags"      "sys/stat.h"         HAVE_CHFLAGS)
 check_symbol_exists("isnan"        "math.h"             HAVE_ISNAN)
 
-check_type_size("((struct tm*)0)->tm_tzajd"  TM_TZADJ)
-check_type_size("((struct tm*)0)->tm_gmtoff" TM_GMTOFF)
+check_struct_has_member("struct tm" "tm_tzajd" "time.h"  HAVE_TM_TZADJ)
+check_struct_has_member("struct tm" "tm_gmtoff" "time.h" HAVE_TM_GMTOFF)
+
 check_type_size("fd_set"                     FD_SET)
 if (HAVE_SYS_SELECT_H)
     list(APPEND CMAKE_EXTRA_INCLUDE_FILES "sys/select.h")
@@ -106,12 +112,12 @@ if (NOT DEFINED TCL_UNSIGNED_CHAR_CHECKED)
             "${CMAKE_CURRENT_BINARY_DIR}"
             "${CMAKE_CURRENT_BINARY_DIR}/unsigned-char.c"
             )
-    set(TCL_UNSIGNED_CHAR_DEFAULT ${DEFAULT_UNSIGNED_CHAR} CACHE BOOL 
+    set(TCL_UNSIGNED_CHAR_DEFAULT ${DEFAULT_UNSIGNED_CHAR} CACHE BOOL
         "char is unsigned by default" FORCE)
     set(TCL_UNSIGNED_CHAR_CHECKED 1 CACHE INTERNAL "" FORCE)
 endif ()
 check_c_source_compiles([[
-int 
+int
 main() {
     signed char *p;
     p = 0;
@@ -181,7 +187,7 @@ check_c_source_compiles([[
                              "cpuid\n\t"
                              "mov %%ebx, %%esi\n\t"
                              "mov %%edi, %%ebx\n\t"
-                             : "=a"(regs[0]), 
+                             : "=a"(regs[0]),
                                "=S"(regs[1]),
                                "=c"(regs[2]),
                                "=d"(regs[3])
@@ -192,8 +198,12 @@ check_c_source_compiles([[
 
 cmake_pop_check_state()
 
+## Xt ##########################################################################
+find_package(X11 REQUIRED Xt)
+target_link_libraries(tcl_config INTERFACE X11::Xt)
+
 ## Configuration ###############################################################
-target_compile_definitions(tcl_config INTERFACE 
+target_compile_definitions(tcl_config INTERFACE
                            HAVE_ZLIB=1
                            $<$<NOT:$<BOOL:${HAVE_GETCWD}>>:USEGETWD=1>
                            $<$<NOT:$<BOOL:${HAVE_GETWD}>>:NO_GETWD=1>

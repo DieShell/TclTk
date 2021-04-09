@@ -5,21 +5,11 @@
 #include <winver.h>
 #include <itclInt.h>
 
-//
-// build-up the name suffix that defines the type of build this is.
-//
-#if DEBUG && !UNCHECKED
-#define SUFFIX_DEBUG	    "g"
-#else
-#define SUFFIX_DEBUG	    ""
-#endif
-
-#define SUFFIX		    SUFFIX_DEBUG
-
+#cmakedefine DEBUG
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION	ITCL_MAJOR_VERSION,ITCL_MINOR_VERSION,ITCL_RELEASE_LEVEL,ITCL_RELEASE_SERIAL
- PRODUCTVERSION	ITCL_MAJOR_VERSION,ITCL_MINOR_VERSION,ITCL_RELEASE_LEVEL,ITCL_RELEASE_SERIAL
+ FILEVERSION	@ITCL_MAJOR_VERSION@,@ITCL_MINOR_VERSION@,@ITCL_RELEASE_LEVEL@,@ITCL_RELEASE_SERIAL@
+ PRODUCTVERSION	@ITCL_MAJOR_VERSION@,@ITCL_MINOR_VERSION@,@ITCL_RELEASE_LEVEL@,@ITCL_RELEASE_SERIAL@
  FILEFLAGSMASK	0x3fL
 #ifdef DEBUG
  FILEFLAGS 	VS_FF_DEBUG
@@ -36,12 +26,12 @@ BEGIN
 	BEGIN
 	    VALUE "FileDescription", "Itcl language extension for Tcl\0"
 	    VALUE "Authors", "Michael McLennan, Arnulf Wiedemann, David Gravereaux, Chad Smith, Mark Harrison, Daniel A. Steffen, and many others\0"
-	    VALUE "OriginalFilename", "itcl" STRINGIFY(ITCL_MAJOR_VERSION) STRINGIFY(ITCL_MINOR_VERSION) SUFFIX ".dll\0"
+	    VALUE "OriginalFilename", "@PKG_LIB_NAME@\0"
 	    VALUE "CompanyName", "Bell Labs Innovations for Lucent Technologies\0"
-	    VALUE "FileVersion", ITCL_PATCH_LEVEL
+	    VALUE "FileVersion", "@ITCL_PATCH_LEVEL@\0"
 	    VALUE "LegalCopyright", "Copyright \251 1993-2009\0"
-	    VALUE "ProductName", "[Incr Tcl] " ITCL_VERSION " for Windows\0"
-	    VALUE "ProductVersion", ITCL_PATCH_LEVEL
+	    VALUE "ProductName", "[Incr Tcl] @ITCL_VERSION@ for Windows\0"
+	    VALUE "ProductVersion", "@ITCL_PATCH_LEVEL@\0"
 	END
     END
     BLOCK "VarFileInfo"

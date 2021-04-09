@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -19,7 +19,7 @@
 # 3. This notice may not be removed or altered from any source distribution.
 
 # Provides the source file for dynamic linking and loading. If this file cannot
-# provide a sensible way to hande dynamic linking the system is believed to be 
+# provide a sensible way to hande dynamic linking the system is believed to be
 # unable to load libraries dynamically.
 
 cmake_push_check_state(RESET)
@@ -37,7 +37,7 @@ if (HAVE_DLFCN_H)
 endif ()
 
 if (HAVE_DLFCN_H AND NOT APPLE) # apple is special
-    target_sources(tcl PRIVATE 
+    target_sources(tcl PRIVATE
                    src/dynamic/tclLoadDl.c
                    )
     return ()
@@ -57,19 +57,19 @@ if (HAVE_SYS_LDR_H AND HAVE_LDFCN_H AND HAVE_A_OUT_H)
                    src/dynamic/tclLoadAix.c
                    src/dynamic/tclLoadDl.c
                    )
-    
+
     if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-        install(FILES 
+        install(FILES
                 "${CMAKE_CURRENT_SOURCE_DIR}/src/dynamic/dlfcn.h"
-                DESTINATION 
-                "${CMAKE_INSTALL_INCLUDEDIR}"
+                DESTINATION
+                "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/"
                 )
     endif ()
     return ()
 endif ()
 
 ## MacOS - mach-o/dyld.h #######################################################
-# MacOS is funky: if we are below 10.4 we use the deprecated 
+# MacOS is funky: if we are below 10.4 we use the deprecated
 # TCL_DYLD_USE_NSMODULE, otherwise we just use POSIX dlfcn.h's dlopen, et al.
 
 if (APPLE)
@@ -123,7 +123,7 @@ if (HAVE_DL_H)
 endif ()
 
 ## Windows - windows.h #########################################################
-# Windows provides LoadLibrary(Ex)(A|W) in windows.h (or some other header 
+# Windows provides LoadLibrary(Ex)(A|W) in windows.h (or some other header
 # included in windows.h)
 
 list(APPEND CMAKE_REQUIRED_DEFINITIONS "-DWIN32_LEAN_AND_MEAN=1")
@@ -139,7 +139,7 @@ endif ()
 ## We do not have dynamic linking ##############################################
 # ¯\_(ツ)_/¯
 
-message(STATUS "System seems unable to load dynamic libraries. Disabling \"load\" support.")
+message(STATUS "System seems unable to dynamically load libraries. Disabling \"load\" support.")
 target_sources(tcl PRIVATE
                src/dynamic/tclLoadNone.c
                )

@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -29,7 +29,7 @@ check_include_file("string.h" HAVE_STRING_H)
 check_include_file("float.h"  HAVE_FLOAT_H)
 check_include_file("ctype.h"  HAVE_CTYPE_H)
 
-if (HAVE_STDLIB_H AND HAVE_STDARG_H 
+if (HAVE_STDLIB_H AND HAVE_STDARG_H
         AND HAVE_STRING_H AND HAVE_FLOAT_H
         AND HAVE_CTYPE_H)
     check_symbol_exists("memchr" "string.h" HAVE_MEMCHR)
@@ -39,7 +39,7 @@ if (HAVE_STDLIB_H AND HAVE_STDARG_H
         file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/ctype_high_check.c"
             "#include <ctype.h>
              #include <stdio.h>
-             int 
+             int
              main() {
                 char c = 'c';
                 printf(\"%c\", toupper(c));
@@ -51,11 +51,11 @@ if (HAVE_STDLIB_H AND HAVE_STDARG_H
                 "${CMAKE_CURRENT_BINARY_DIR}/ctype_high_check.c"
                 RUN_OUTPUT_VARIABLE HIGH_RAN
                 )
-        set(CHECKED_CTYPE_HIGH_BIT 1 CACHE INTERNAL 
+        set(CHECKED_CTYPE_HIGH_BIT 1 CACHE INTERNAL
             "Whether we already checked if ctype works with high bit set" FORCE)
 
         if (HIGH_CHECK_BUILT AND HIGH_RAN STREQUAL "AA")
-            set(HAVE_ANSIC_CTYPE 1 CACHE INTERNAL 
+            set(HAVE_ANSIC_CTYPE 1 CACHE INTERNAL
                 "Do we have an ANSI C compatible ctype.h" FORCE)
         else ()
             set(HAVE_ANSIC_CTYPE 0 CACHE INTERNAL
@@ -76,8 +76,8 @@ endif ()
 check_symbol_exists("memcmp"  "string.h" HAVE_MEMCMP)
 check_symbol_exists("memmove" "string.h" HAVE_MEMMOVE)
 check_symbol_exists("strstr"  "string.h" HAVE_STRSTR)
-check_symbol_exists("strtol" "strlib.h"  HAVE_STRTOL)
-check_symbol_exists("strtoul" "strlib.h" HAVE_STRTOUL)
+check_symbol_exists("strtol"  "stdlib.h" HAVE_STRTOL)
+check_symbol_exists("strtoul" "stdlib.h" HAVE_STRTOUL)
 
 # cast to union
 check_c_source_compiles([[
@@ -112,7 +112,7 @@ endif ()
 
 # check if strtoul is broken
 if (HAVE_STRTOUL AND NOT DEFINED TCL_STRTOUL_TESTED)
-    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/stroul-test.c"
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/strtoul-test.c"
          [[#include <stdlib.h>
            int
            main() {
@@ -147,7 +147,7 @@ if (NOT STDC_HEADERS)
                                )
 endif ()
 
-target_sources(tcl_config INTERFACE 
+target_sources(tcl_config INTERFACE
                $<$<NOT:$<BOOL:${HAVE_MEMCMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/ansic/memcmp.c>
                $<$<NOT:$<BOOL:${HAVE_STRSTR}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/ansic/strstr.c>
                $<$<NOT:$<BOOL:${HAVE_STRTOL}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strtol.c>
@@ -156,6 +156,9 @@ target_sources(tcl_config INTERFACE
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES
+            $<$<NOT:$<BOOL:${HAVE_FLOAT_H}>>:src/ansic/compat/float.h>
+            $<$<NOT:$<BOOL:${HAVE_STDLIB_H}>>:src/ansic/compat/stdlib.h>
+            $<$<NOT:$<BOOL:${HAVE_STRING_H}>>:src/ansic/compat/string.h>
             DESTINATION
             "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
             )

@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -34,10 +34,9 @@ target_sources(tcl PRIVATE
                src/tclWinNotify.c
                src/tclWinPipe.c
                src/tclWinSock.c
-               #src/tclWinTest.c
                src/tclWinThrd.c
                src/tclWinTime.c
-               
+
                src/tclWinInt.h
                src/tclWinPort.h
                )
@@ -47,28 +46,27 @@ target_sources(tclsh PRIVATE
                )
 target_sources(tcl_reg PRIVATE src/tclWinReg.c)
 target_sources(tcl_dde PRIVATE src/tclWinDde.c)
+if (TARGET tcltest)
+    target_sources(tcltest PRIVATE
+                   src/tclAppInit.c
+                   src/tclWinTest.c
+                   )
 
-#if (NOT TCL_BUILD_SHARED)
-#    target_sources(tcl PUBLIC 
-#                   src/tclWinReg.c
-#                   src/tclWinDde.c
-#                   )
-#else ()
-#    target_sources(tclsh PUBLIC 
-#                   src/tclWinReg.c
-#                   src/tclWinDde.c
-#                   )
-#endif ()
+    target_compile_definitions(tcltest PRIVATE
+                               UNICODE=1
+                               _UNICODE=1
+                               )
+endif ()
 
-file (COPY 
+file (COPY
       "${CMAKE_CURRENT_SOURCE_DIR}/../common/src/tclMain.c"
       DESTINATION
       "${CMAKE_CURRENT_BINARY_DIR}"
       )
-target_sources(tcl PRIVATE 
+target_sources(tcl PRIVATE
                "${CMAKE_CURRENT_BINARY_DIR}/tclMain.c"
                )
-set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/tclMain.c" 
+set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/tclMain.c"
                             src/tclAppInit.c
                             TARGET_DIRECTORY tcl
                             PROPERTIES
@@ -76,10 +74,10 @@ set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/tclMain.c"
                             )
 
 ## Options #####################################################################
-option(TCL_ENABLE_TIME64BIT 
+option(TCL_ENABLE_TIME64BIT
        "Force 64-bit time in 32-bit applications [On]" On
        )
-set(TCL_WITH_ENCODING "cp1252" CACHE STRING 
+set(TCL_WITH_ENCODING "cp1252" CACHE STRING
     "The encoding to use (--with-encoding=) [cp1252]"
     )
 
@@ -115,16 +113,16 @@ extern int divsor;
 int main() {
     __try {
         int x = 1 / divsor;
-    } 
+    }
     __except(GetExceptionCode() == EXCEPTION_INT_DIVIDE_BY_ZERO ?
              EXCEPTION_EXECUTE_HANDLER :
              EXCEPTION_CONTINUE_SEARCH) {
         printf("you cannot divide by zero");
     }
-}   
+}
 ]] HAVE_STRUCTURED_EH)
 
-# Note: This only checks the following four architectures: 
+# Note: This only checks the following four architectures:
 # x86, x86-64, ARM, and ARM64
 # since Windows only runs on those arches. All other arches that may get Windows
 # support in the future need to be checked here additionally.
@@ -173,7 +171,7 @@ else ()
     set(TCL_RELEASE_LEVEL 2 CACHE INTERNAL "." FORCE)
 endif ()
 string(REGEX REPLACE [[[\.ab]+]] "" TCL_WIN_VERSION_PATCH "${TCL_PATCH_LEVEL}")
-set(TCL_WIN_VERSION 
+set(TCL_WIN_VERSION
     "${TCL_VERSION}.${TCL_RELEASE_LEVEL}.${TCL_WIN_VERSION_PATCH}"
     CACHE INTERNAL
     "The version used by the tclsh.exe.manifest file"
@@ -181,18 +179,18 @@ set(TCL_WIN_VERSION
     )
 message(STATUS "Configuring manifest to ${TCL_TARGET_ARCH}")
 configure_file(manifest/tclsh.exe.manifest.in
-               tclsh.exe.manifest
+               manifest/tclsh.exe.manifest
                @ONLY
                )
 
-target_sources(tclsh PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/tclsh.exe.manifest")
+target_sources(tclsh PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/manifest/tclsh.exe.manifest")
 if (TCL_BUILD_SHARED)
     target_sources(tcl     PRIVATE manifest/tcl86.dll.manifest)
     target_sources(tcl_dde PRIVATE manifest/tcldde14.dll.manifest)
     target_sources(tcl_reg PRIVATE manifest/tclreg13.dll.manifest)
 endif ()
 
-target_compile_definitions(tcl_config INTERFACE 
+target_compile_definitions(tcl_config INTERFACE
                            $<$<C_COMPILER_ID:MSVC>:inline=__inline>
                            HAVE_NO_SEH=$<NOT:$<BOOL:${HAVE_STRUCTURED_EH}>>
                            HAVE_ZLIB=1
@@ -204,17 +202,27 @@ target_compile_definitions(tcl_config INTERFACE
 
 target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/manifest>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/win>
                            )
 
 target_link_options(tcl_config INTERFACE
                     $<$<C_COMPILER_ID:GNU,Clang>:-municode>
                     )
+target_link_options(tclstub PRIVATE
+                    $<$<C_COMPILER_ID:MSVC>:-nodefaultlib>
+                    )
 target_link_options(tclsh PRIVATE
                     $<$<C_COMPILER_ID:GNU,Clang>:-mconsole>
+                    $<$<C_COMPILER_ID:GNU,Clang>:-Wl,--stack,2300000>
+                    $<$<C_COMPILER_ID:MSVC>:-stack:2300000>
                     )
+if (TARGET tcltest)
+    target_link_options(tcltest PRIVATE
+                        $<$<C_COMPILER_ID:GNU,Clang>:-mconsole>
+                        $<$<C_COMPILER_ID:GNU,Clang>:-Wl,--stack,2300000>
+                        $<$<C_COMPILER_ID:MSVC>:-stack:2300000>
+                        )
+endif ()
 
 target_link_libraries(tcl_config INTERFACE kernel32 ws2_32 netapi32 userenv user32 advapi32)
 
