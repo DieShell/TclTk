@@ -41,9 +41,9 @@ extern "C" {
  * unix/configure.in	(2 LOC Major, 2 LOC minor, 1 LOC patch)
  * win/configure.in	(as above)
  * win/tcl.m4		(not patchlevel)
- * README.old.old		(sections 0 and 2, with and without separator)
+ * README		(sections 0 and 2, with and without separator)
  * macosx/Tcl-Common.xcconfig (not patchlevel) 1 LOC
- * win/README.old.old		(not patchlevel) (sections 0 and 2)
+ * win/README		(not patchlevel) (sections 0 and 2)
  * unix/tcl.spec	(1 LOC patch)
  * tools/tcl.hpj.in	(not patchlevel, for windows installer)
  */
