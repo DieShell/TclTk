@@ -43,6 +43,8 @@ include(CheckLibraryExists)
 include(CheckStructHasMember)
 include(CheckCSourceCompiles)
 include(CMakePushCheckState)
+include(CheckIncludeFile)
+include(CheckIncludeFiles)
 include(TestBigEndian)
 
 ## System cabaility checks #####################################################
@@ -88,6 +90,15 @@ option(TCL_ENABLE_THREADS
 option(TCL_ENABLE_TESTS
        "Enable tests using the tcltest driver [On]" On
        )
+if (WIN32)
+    set(TCL_WITH_ENCODING "cp1252" CACHE STRING
+        "The encoding to use (--with-encoding=) [cp1252]"
+        )
+else ()
+    set(TCL_WITH_ENCODING "iso8859-1" CACHE STRING
+        "The encoding to use (--with-encoding=) [iso8859-1]"
+        )
+endif ()
 if (TCL_ENABLE_INSTALL)
     set(TCL_INSTALL_TZDATA "auto" CACHE STRING
         "Enable installing tzdata if the system does not provide it (true/false/auto) [auto]"
@@ -160,8 +171,19 @@ if (TCL_ENABLE_TESTS)
     message(STATUS "Enabling test support")
     set(TCL_TEST_LIBRARY "${CMAKE_BINARY_DIR}/lib/tcl${TCL_VERSION}" CACHE INTERNAL "")
     set(TCL8_TEST_LIBRARY "${CMAKE_BINARY_DIR}/lib/tcl${TCL_MAJOR_VERSION}" CACHE INTERNAL "")
+    set(TK_TEST_LIBRARY "${CMAKE_BINARY_DIR}/lib/tk${TK_VERSION}" CACHE INTERNAL "")
     include(CTest)
+endif ()
+
+# Windows is funky with its subsystems
+if (WIN32)
+    set(TCL_EXE "WIN32")
 endif ()
 
 ## Tcl #########################################################################
 add_subdirectory(tcl)
+
+## Tk ##########################################################################
+if (TCL_ENABLE_TK)
+    add_subdirectory(tk)
+endif ()

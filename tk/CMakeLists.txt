@@ -1,0 +1,139 @@
+# TclTk CMake project
+#
+# Copyright (c) 2021, András Bodor <bodand@pm.me>
+#
+# This software is provided 'as-is', without any express or implied
+# warranty.  In no event will the authors be held liable for any damages
+# arising from the use of this software.
+#
+# Permission is granted to anyone to use this software for any purpose,
+# including commercial applications, and to alter it and redistribute it
+# freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must not
+#    claim that you wrote the original software. If you use this software
+#    in a product, an acknowledgment in the product documentation would be
+#    appreciated but is not required.
+# 2. Altered source versions must be plainly marked as such, and must not be
+#    misrepresented as being the original software.
+# 3. This notice may not be removed or altered from any source distribution.
+
+## Targets #####################################################################
+# wish and tcl libs
+add_executable(wish ${TCL_EXE})
+add_library(tk ${TCL_BUILD_TYPE})
+add_library(tkstub STATIC)
+
+# pseudo-target to contain the configuration settings
+add_library(tk_config INTERFACE)
+
+# link all the things together
+target_link_libraries(wish PRIVATE tk tkstub)
+target_link_libraries(tk PRIVATE tkstub)
+
+target_link_libraries(wish PUBLIC tk_config)
+target_link_libraries(tk PUBLIC tk_config)
+target_link_libraries(tkstub PUBLIC tk_config)
+
+target_link_libraries(tk_config INTERFACE
+                      tcl_config
+                      tclstub
+                      tcl
+                      )
+
+# proper output names
+set_target_properties(wish PROPERTIES
+                      OUTPUT_NAME "wish${TK_DOUBLE_VERSION}"
+                      POSITION_INDEPENDENT_CODE TRUE
+                      )
+set_target_properties(tk PROPERTIES
+                      PREFIX ""
+                      OUTPUT_NAME "tk${TK_DOUBLE_VERSION}"
+                      POSITION_INDEPENDENT_CODE TRUE
+                      )
+set_target_properties(tkstub PROPERTIES
+                      OUTPUT_NAME "tkstub${TK_DOUBLE_VERSION}"
+                      POSITION_INDEPENDENT_CODE TRUE
+                      )
+
+# Add tktest if tests enabled
+if (TCL_ENABLE_TESTS)
+    add_executable(tktest)# ${TCL_EXE})
+
+    target_link_libraries(tktest PRIVATE tk_config tkstub tk)
+
+    set_target_properties(tktest PROPERTIES
+                          OUTPUT_NAME "tktest${TK_DOUBLE_VERSION}"
+                          POSITION_INDEPENDENT_CODE TRUE
+                          COMPILE_DEFINITIONS "TK_TEST=1"
+                          )
+
+    if (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+        add_custom_command(TARGET tktest POST_BUILD
+                           COMMAND "${CMAKE_COMMAND}" -E copy $<TARGET_FILE:tcl> $<TARGET_FILE_DIR:tktest>
+                           )
+    endif ()
+endif ()
+
+## Platform independent sources ################################################
+add_subdirectory(lib/compat_layer)
+add_subdirectory(bitmaps)
+add_subdirectory(lib/common)
+
+## Platform specific sources ###################################################
+if (WIN32)
+    add_subdirectory(lib/win32_backend)
+else ()
+    if (APPLE)
+        add_subdirectory(lib/macos_backend)
+    endif ()
+
+    if (NOT UNIX)
+        message(WARNING
+                [[CMake doesn't think your system is Windows, MacOS, or UNIX-ish. This may very
+well be incorrect. For this reason we are proceeding as if on UNIX. If this
+works, great. If it does not, you found a platform which cannot build Tk.
+Congratulations!
+Also try the official distributions, maybe those, blessed with AutoTools lunacy,
+can help you.]])
+    endif ()
+
+    add_subdirectory(lib/unix_backend)
+endif ()
+
+## CMake has issues remembering ##
+# "old" CMake (<3.18) support
+set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/lib/common/src/tkMain2.c"
+                            PROPERTIES
+                            COMPILE_DEFINITIONS "UNICODE=1;_UNICODE=1"
+                            )
+set_source_files_properties("lib/win32_backend/src/winMain.c"
+                            PROPERTIES
+                            COMPILE_DEFINITIONS "UNICODE=1;_UNICODE=1"
+                            )
+
+set(TK_LIB_NAME "tk${TK_DOUBLE_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}"
+    CACHE INTERNAL "" FORCE
+    )
+set(TK_ACCESS_PATH ".. .. bin")
+configure_file(pkgIndex.tcl.in
+               pkgIndex.tcl
+               @ONLY
+               )
+
+## Tcl sources #################################################################
+add_subdirectory(library)
+
+## Tests #######################################################################
+add_subdirectory(tests)
+
+## Install #####################################################################
+if (TCL_ENABLE_INSTALL)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}"
+            )
+    install(TARGETS tk wish tkstub
+            RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+            ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+            )
+endif ()

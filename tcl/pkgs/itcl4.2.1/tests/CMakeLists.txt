@@ -70,7 +70,7 @@ file(GLOB TEA_ITCL_TESTS
 foreach (test IN LISTS TEA_ITCL_TESTS)
     string(REGEX REPLACE [[\.test$]] "" test_NAME "${test}")
     add_test(NAME "ITcl_${test_NAME}"
-             COMMAND tclsh "tests/${test}"
+             COMMAND tcltest "tests/all.tcl" -file "${test}"
              WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/.."
              )
 endforeach ()

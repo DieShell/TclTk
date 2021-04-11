@@ -61,7 +61,7 @@ file(GLOB TEA_THREAD_TESTS
 foreach (test IN LISTS TEA_THREAD_TESTS)
     string(REGEX REPLACE [[\.test$]] "" test_NAME "${test}")
     add_test(NAME "thread_${test_NAME}"
-             COMMAND tclsh "tests/${test}"
+             COMMAND tcltest "tests/all.tcl" -file "${test}"
              WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/.."
              )
 endforeach ()

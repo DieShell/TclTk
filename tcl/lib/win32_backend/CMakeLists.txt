@@ -77,15 +77,12 @@ set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/tclMain.c"
 option(TCL_ENABLE_TIME64BIT
        "Force 64-bit time in 32-bit applications [On]" On
        )
-set(TCL_WITH_ENCODING "cp1252" CACHE STRING
-    "The encoding to use (--with-encoding=) [cp1252]"
-    )
 
 ## System checks ###############################################################
 cmake_push_check_state(RESET)
 
 ## headers ##
-check_include_file("wspiapi.h"  HAVE_WSPIAPI_H)
+check_include_files("windows.h;wspiapi.h"  HAVE_WSPIAPI_H)
 
 ## compiles ##
 check_c_source_compiles([[
@@ -107,17 +104,38 @@ int main() { __cpuidex(0, 0, 0); }
 ]] HAVE_INTRIN_H)
 
 check_c_source_compiles([[
+/* literally an example from
+   https://docs.microsoft.com/en-us/windows/win32/debug/using-an-exception-handler
+   if this doesn't compile, I'm going to be pissed
+   Narrator: It didn't compile
+   */
+#include <windows.h>
 #include <stdio.h>
-extern int divsor;
+DWORD FilterFunction()
+{
+    printf("1 ");                     // printed first
+    return EXCEPTION_EXECUTE_HANDLER;
+}
 
-int main() {
-    __try {
-        int x = 1 / divsor;
+int main(VOID)
+{
+    __try
+    {
+        __try
+        {
+            RaiseException(
+                1,                    // exception code
+                0,                    // continuable exception
+                0, NULL);             // no arguments
+        }
+        __finally
+        {
+            printf("2 ");             // this is printed second
+        }
     }
-    __except(GetExceptionCode() == EXCEPTION_INT_DIVIDE_BY_ZERO ?
-             EXCEPTION_EXECUTE_HANDLER :
-             EXCEPTION_CONTINUE_SEARCH) {
-        printf("you cannot divide by zero");
+    __except ( FilterFunction() )
+    {
+        printf("3\\n");                // this is printed last
     }
 }
 ]] HAVE_STRUCTURED_EH)
@@ -158,6 +176,9 @@ if (NOT DEFINED TCL_TARGET_ARCH)
             "${CMAKE_CURRENT_BINARY_DIR}/which-arch.c"
             RUN_OUTPUT_VARIABLE TCL_TARGET_ARCH
             )
+    set(TCL_TARGET_ARCH "${TCL_TARGET_ARCH}" CACHE INTERNAL
+        "target arch for manifests. Same for Tcl and Tk" FORCE
+        )
 endif ()
 
 cmake_pop_check_state()
@@ -177,7 +198,7 @@ set(TCL_WIN_VERSION
     "The version used by the tclsh.exe.manifest file"
     FORCE
     )
-message(STATUS "Configuring manifest to ${TCL_TARGET_ARCH}")
+message(STATUS "Configuring tlcsh.exe manifest to ${TCL_TARGET_ARCH}")
 configure_file(manifest/tclsh.exe.manifest.in
                manifest/tclsh.exe.manifest
                @ONLY
@@ -192,7 +213,9 @@ endif ()
 
 target_compile_definitions(tcl_config INTERFACE
                            $<$<C_COMPILER_ID:MSVC>:inline=__inline>
-                           HAVE_NO_SEH=$<NOT:$<BOOL:${HAVE_STRUCTURED_EH}>>
+                           $<$<NOT:$<BOOL:${HAVE_STRUCTURED_EH}>>:HAVE_NO_SEH=1>
+                           _ATL_XP_TARGETING=1
+                           __USE_MINGW_ANSI_STDIO=0
                            HAVE_ZLIB=1
                            $<$<BOOL:${TCL_ENABLE_TIME64BIT}>:_USE_64BIT_TIME_T>
                            $<$<NOT:$<BOOL:${HAVE_FINDEX_ENUMS}>>:HAVE_NO_FINDEX_ENUMS>

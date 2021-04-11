@@ -18,114 +18,34 @@ project(Tcl-Common C)
 
 ## Target #####################################################################
 target_sources(tcl PRIVATE
-                  src/tcl.h
-                            src/tclAlloc.c
-                            src/tclAssembly.c
-                            src/tclAsync.c
-                            src/tclBasic.c
-                            src/tclBinary.c
-                            src/tclCkalloc.c
-                            src/tclClock.c
-                            src/tclCmdAH.c
-                            src/tclCmdIL.c
-                            src/tclCmdMZ.c
-                            src/tclCompCmds.c
-                            src/tclCompCmdsGR.c
-                            src/tclCompCmdsSZ.c
-                            src/tclCompExpr.c
-           src/tclCompile.h src/tclCompile.c
-                            src/tclConfig.c
-                            src/tclDate.c
-             src/tclDecls.h
-                            src/tclDictObj.c
-                            src/tclDisassemble.c
-                            src/tclEncoding.c
-                            src/tclEnsemble.c
-                            src/tclEnv.c
-                            src/tclEvent.c
-                            src/tclExecute.c
-                            src/tclFCmd.c
-                            src/tclFileName.c
-        src/tclFileSystem.h
-                            src/tclGet.c
-                            src/tclHash.c
-                            src/tclHistory.c
-                            src/tclIndexObj.c
-               src/tclInt.h
-          src/tclIntDecls.h
-                            src/tclInterp.c
-      src/tclIntPlatDecls.h
-                src/tclIO.h src/tclIO.c
-                            src/tclIOCmd.c
-                            src/tclIOGT.c
-                            src/tclIORChan.c
-                            src/tclIORTrans.c
-                            src/tclIOSock.c
-                            src/tclIOUtil.c
-                            src/tclLink.c
-                            src/tclListObj.c
-                            src/tclLiteral.c
-                            src/tclLoad.c
-                            src/tclMain.c
-                            src/tclNamesp.c
-                            src/tclNotify.c
-                            src/tclObj.c
-                src/tclOO.h src/tclOO.c
-                            src/tclOOBasic.c
-                            src/tclOOCall.c
-           src/tclOODecls.h
-                            src/tclOODefineCmds.c
-                            src/tclOOInfo.c
-             src/tclOOInt.h
-        src/tclOOIntDecls.h
-                            src/tclOOMethod.c
-                            src/tclOOStubInit.c
-                            src/tclOptimize.c
-                            src/tclPanic.c
-             src/tclParse.h src/tclParse.c
-                            src/tclPathObj.c
-                            src/tclPipe.c
-                            src/tclPkg.c
-                            src/tclPkgConfig.c
-         src/tclPlatDecls.h
-              src/tclPort.h
-                            src/tclPosixStr.c
-                            src/tclPreserve.c
-                            src/tclProc.c
-            src/tclRegexp.h src/tclRegexp.c
-                            src/tclResolve.c
-                            src/tclResult.c
-                            src/tclScan.c
-                            src/tclStringObj.c
-         src/tclStringRep.h
-        src/tclStringTrim.h
-                            src/tclStrToD.c
-                            src/tclStubInit.c
-                            src/tclThread.c
-                            src/tclThreadAlloc.c
-                            src/tclThreadJoin.c
-                            src/tclThreadStorage.c
-                            src/tclTimer.c
-           src/tclTomMath.h
-      src/tclTomMathDecls.h
-        src/tclTomMathInt.h
-                            src/tclTomMathInterface.c
-                            src/tclTrace.c
-                            src/tclUniData.c
-                            src/tclUtf.c
-                            src/tclUtil.c
-                            src/tclVar.c
-                            src/tclZlib.c
-
-                            src/regcomp.c
-            src/regcustom.h
-                            src/regerror.c
-              src/regerrs.h
-                src/regex.h
-                            src/regexec.c
-                            src/regfree.c
-              src/regguts.h
-            )
+               src/tcl.h src/tclAlloc.c src/tclAssembly.c src/tclAsync.c src/tclBasic.c
+               src/tclBinary.c src/tclCkalloc.c src/tclClock.c src/tclCmdAH.c
+               src/tclCmdIL.c src/tclCmdMZ.c src/tclCompCmds.c src/tclCompCmdsGR.c
+               src/tclCompCmdsSZ.c src/tclCompExpr.c src/tclCompile.h src/tclCompile.c
+               src/tclConfig.c src/tclDate.c src/tclDecls.h src/tclDictObj.c
+               src/tclDisassemble.c src/tclEncoding.c src/tclEnsemble.c src/tclEnv.c
+               src/tclEvent.c src/tclExecute.c src/tclFCmd.c src/tclFileName.c
+               src/tclFileSystem.h src/tclGet.c src/tclHash.c src/tclHistory.c
+               src/tclIndexObj.c src/tclInt.h src/tclIntDecls.h src/tclInterp.c
+               src/tclIntPlatDecls.h src/tclIO.h src/tclIO.c src/tclIOCmd.c
+               src/tclIOGT.c src/tclIORChan.c src/tclIORTrans.c src/tclIOSock.c
+               src/tclIOUtil.c src/tclLink.c src/tclListObj.c src/tclLiteral.c
+               src/tclLoad.c src/tclMain.c src/tclNamesp.c src/tclNotify.c
+               src/tclObj.c src/tclOO.h src/tclOO.c src/tclOOBasic.c src/tclOOCall.c
+               src/tclOODecls.h src/tclOODefineCmds.c src/tclOOInfo.c src/tclOOInt.h
+               src/tclOOIntDecls.h src/tclOOMethod.c src/tclOOStubInit.c src/tclOptimize.c
+               src/tclPanic.c src/tclParse.h src/tclParse.c src/tclPathObj.c
+               src/tclPipe.c src/tclPkg.c src/tclPkgConfig.c src/tclPlatDecls.h
+               src/tclPort.h src/tclPosixStr.c src/tclPreserve.c src/tclProc.c
+               src/tclRegexp.h src/tclRegexp.c src/tclResolve.c src/tclResult.c
+               src/tclScan.c src/tclStringObj.c src/tclStringRep.h src/tclStringTrim.h
+               src/tclStrToD.c src/tclStubInit.c src/tclThread.c src/tclThreadAlloc.c
+               src/tclThreadJoin.c src/tclThreadStorage.c src/tclTimer.c src/tclTomMath.h
+               src/tclTomMathDecls.h src/tclTomMathInt.h src/tclTomMathInterface.c
+               src/tclTrace.c src/tclUniData.c src/tclUtf.c src/tclUtil.c src/tclVar.c
+               src/tclZlib.c src/regcomp.c src/regcustom.h src/regerror.c src/regerrs.h
+               src/regex.h src/regexec.c src/regfree.c src/regguts.h
+               )
 target_sources(tclstub PRIVATE
                src/tclStubLib.c
                src/tclOOStubLib.c
@@ -141,11 +61,17 @@ if (TARGET tcltest)
 endif ()
 
 target_compile_definitions(tcl_config INTERFACE
-                           BUILD_tcl=1
                            MODULE_SCOPE=extern
+                           "TCL_CFGVAL_ENCODING=\"${TCL_WITH_ENCODING}\""
                            $<$<BOOL:${TCL_ENABLE_UNLOAD_DLLS}>:TCL_UNLOAD_DLLS=1>
                            )
-
+target_compile_definitions(tcl PRIVATE BUILD_tcl=1)
+target_compile_definitions(tclstub PRIVATE BUILD_tcl=1)
+target_compile_definitions(tcl_reg PRIVATE BUILD_tcl=1)
+target_compile_definitions(tcl_dde PRIVATE BUILD_tcl=1)
+if (TARGET tcltest)
+    target_compile_definitions(tcltest PRIVATE BUILD_tcl=1)
+endif ()
 ## Setting configuration values
 target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>

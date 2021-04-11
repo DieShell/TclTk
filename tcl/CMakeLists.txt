@@ -40,6 +40,7 @@ set_target_properties(tclsh PROPERTIES
                       POSITION_INDEPENDENT_CODE TRUE
                       )
 set_target_properties(tcl PROPERTIES
+                      PREFIX ""
                       OUTPUT_NAME "tcl${TCL_DOUBLE_VERSION}"
                       POSITION_INDEPENDENT_CODE TRUE
                       )
@@ -47,6 +48,12 @@ set_target_properties(tclstub PROPERTIES
                       OUTPUT_NAME "tclstub${TCL_DOUBLE_VERSION}"
                       POSITION_INDEPENDENT_CODE TRUE
                       )
+
+# config based on the environment
+target_compile_definitions(tcl_config INTERFACE
+                           TCL_CFG_DO64BIT=$<BOOL:${TCL_BUILD_64BIT}>
+                           TCL_CFG_OPTIMIZED=$<NOT:$<CONFIG:Debug>>
+                           )
 
 # Add tcltest if tests enabled
 if (TCL_ENABLE_TESTS)
@@ -57,6 +64,7 @@ if (TCL_ENABLE_TESTS)
     set_target_properties(tcltest PROPERTIES
                           OUTPUT_NAME "tcltest${TCL_DOUBLE_VERSION}"
                           POSITION_INDEPENDENT_CODE TRUE
+                          COMPILE_DEFINITIONS "TCL_TEST=1"
                           )
 endif ()
 
