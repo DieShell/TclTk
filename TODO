@@ -1,0 +1,12 @@
+# Compatibility
+
+- Provide pkg-config files in tcl.pc and tk.pc
+- Provide standard {tcl,tk,tdbc}Config.sh, etc. files for finding out how
+  to compile Tcl related stuffs
+
+# Improvements
+
+- A more sophisticated libm detection
+- Put configuration into headers instead of passing everything on the command
+  line. Note that there was an infant version of this in the original sources
+  but it was just unused by most sources: I removed it to replace it later.

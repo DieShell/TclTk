@@ -51,7 +51,7 @@ cmake_push_check_state(RESET)
 check_include_files("windows.h;uxtheme.h" HAVE_UXTHEME_H)
 check_include_files("windows.h;vssym32.h" HAVE_VSSYM32_H)
 
-check_symbol_exists("strtoi64" "stdlib.h" HAVE_STRTOI64)
+check_symbol_exists("_strtoi64" "stdlib.h" HAVE_STRTOI64)
 
 cmake_pop_check_state()
 
@@ -78,6 +78,7 @@ configure_file(manifest/wish.exe.manifest.in
 
 target_sources(wish PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/manifest/wish.exe.manifest")
 
+## Configuration ###############################################################
 target_compile_definitions(tk_config INTERFACE
                            $<$<NOT:$<BOOL:${HAVE_STRTOI64}>>:NO_STRTOI64=1>
                            $<$<BOOL:${HAVE_UXTHEME_H}>:HAVE_UXTHEME_H=1>
@@ -103,10 +104,3 @@ target_link_libraries(tk_config INTERFACE
                       netapi32 kernel32 user32 advapi32 userenv ws2_32 gdi32
                       comdlg32 imm32 comctl32 shell32 uuid ole32 oleaut32
                       )
-
-#if (TARGET tktest)
-#    target_link_options(tktest PRIVATE
-#                        $<$<C_COMPILER_ID:GNU,Clang>:-mwindows>
-#                        )
-#endif ()
-#

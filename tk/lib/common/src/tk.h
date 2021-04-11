@@ -61,10 +61,10 @@ extern "C" {
  * library/tk.tcl	(1 LOC patch)
  * unix/configure.in	(2 LOC Major, 2 LOC minor, 1 LOC patch)
  * win/configure.in	(as above)
- * README		(sections 0 and 1)
+ * README.old.old		(sections 0 and 1)
  * macosx/Tk-Common.xcconfig (not patchlevel) 1 LOC
- * win/README		(not patchlevel)
- * unix/README		(not patchlevel)
+ * win/README.old.old		(not patchlevel)
+ * unix/README.old.old		(not patchlevel)
  * unix/tk.spec		(1 LOC patch)
  * win/tcl.m4		(not patchlevel)
  *

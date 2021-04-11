@@ -1,6 +1,0 @@
-
-unix:
-	HAVE_PW_GECOS 	struct passwd::pw_gecos
-
-+macos:
-	opt: TK_ENABLE_AQUA 
