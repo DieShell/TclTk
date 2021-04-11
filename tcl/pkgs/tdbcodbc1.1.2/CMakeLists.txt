@@ -29,7 +29,7 @@ option(TEA_TDBC_ODBC_ENABLE_THREADS
        )
 
 option(TEA_TDBC_ODBC_ENABLE_TESTS
-       "Enable running tests for the TDBC ODBC connector [On]" On
+       "Enable running tests for the TDBC ODBC connector [Off] Off
        )
 
 # Option integrity checks
