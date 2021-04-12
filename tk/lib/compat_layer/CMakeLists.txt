@@ -60,6 +60,7 @@ target_sources(tk_config INTERFACE
                src/X/X11/Xfuncproto.h
                src/X/X11/Xlib.h
                src/X/X11/Xutil.h
+               src/tkImgUtil.c
                )
 
 ## Install #####################################################################

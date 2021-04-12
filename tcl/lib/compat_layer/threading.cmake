@@ -27,6 +27,8 @@ if (Threads_FOUND)
     target_compile_definitions(tcl_config INTERFACE
                                TCL_THREADS=1
                                USE_THREAD_ALLOC=1
+                               $<$<NOT:$<PLATFORM_ID:Windows>>:_REENTRANT=1>
+                               $<$<NOT:$<PLATFORM_ID:Windows>>:_THREAD_SAFE=1>
                                )
     target_link_libraries(tcl_config INTERFACE Threads::Threads)
 else ()

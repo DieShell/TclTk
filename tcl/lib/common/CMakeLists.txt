@@ -62,13 +62,17 @@ endif ()
 
 target_compile_definitions(tcl_config INTERFACE
                            MODULE_SCOPE=extern
-                           "TCL_CFGVAL_ENCODING=\"${TCL_WITH_ENCODING}\""
+                           $<$<PLATFORM_ID:Windows>:TCL_CFGVAL_ENCODING=\"${TCL_WITH_ENCODING}\">
                            $<$<BOOL:${TCL_ENABLE_UNLOAD_DLLS}>:TCL_UNLOAD_DLLS=1>
                            )
 target_compile_definitions(tcl PRIVATE BUILD_tcl=1)
 target_compile_definitions(tclstub PRIVATE BUILD_tcl=1)
-target_compile_definitions(tcl_reg PRIVATE BUILD_tcl=1)
-target_compile_definitions(tcl_dde PRIVATE BUILD_tcl=1)
+if (TARGET tcl_reg)
+    target_compile_definitions(tcl_reg PRIVATE BUILD_tcl=1)
+endif ()
+if (TARGET tcl_dde)
+    target_compile_definitions(tcl_dde PRIVATE BUILD_tcl=1)
+endif ()
 if (TARGET tcltest)
     target_compile_definitions(tcltest PRIVATE BUILD_tcl=1)
 endif ()

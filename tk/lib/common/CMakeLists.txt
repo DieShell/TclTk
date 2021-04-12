@@ -31,13 +31,13 @@ target_sources(tk PRIVATE
                src/tkFocus.c src/tkFont.c src/tkFont.h src/tkFrame.c src/tkGC.c
                src/tkGeometry.c src/tkGet.c src/tkGrab.c src/tkGrid.c src/tkImage.c
                src/tkImgBmap.c src/tkImgGIF.c src/tkImgPhInstance.c src/tkImgPhoto.c
-               src/tkImgPhoto.h src/tkImgPNG.c src/tkImgPPM.c src/tkImgUtil.c
+               src/tkImgPhoto.h src/tkImgPNG.c src/tkImgPPM.c
                src/tkInt.h src/tkIntDecls.h src/tkIntPlatDecls.h src/tkIntXlibDecls.h
                src/tkListbox.c src/tkMacWinMenu.c src/tkMain.c src/tkMenu.c
                src/tkMenu.h src/tkMenubutton.c src/tkMenubutton.h src/tkMenuDraw.c
                src/tkMessage.c src/tkObj.c src/tkOldConfig.c src/tkOption.c
                src/tkPack.c src/tkPanedWindow.c src/tkPlace.c src/tkPlatDecls.h
-               src/tkPointer.c src/tkPort.h src/tkRectOval.c src/tkScale.c
+               src/tkPort.h src/tkRectOval.c src/tkScale.c
                src/tkScale.h src/tkScrollbar.c src/tkScrollbar.h src/tkSelect.c
                src/tkSelect.h src/tkSquare.c src/tkStubInit.c src/tkStyle.c
                src/tkText.c src/tkText.h src/tkTextBTree.c src/tkTextDisp.c
@@ -80,7 +80,9 @@ target_compile_definitions(tk_config INTERFACE
 
 # Windows _?UNICODE main
 configure_file(src/tkMain.c src/tkMain2.c COPYONLY)
-target_sources(tk PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/src/tkMain2.c")
+if (WIN32)
+    target_sources(tk PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/src/tkMain2.c")
+endif ()
 
 ## Setting configuration values
 target_include_directories(tk_config INTERFACE

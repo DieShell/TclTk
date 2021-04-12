@@ -228,6 +228,8 @@ target_compile_definitions(tcl_config INTERFACE
                            $<$<BOOL:${HAVE_PUTENV_COPY}>:HAVE_PUTENV_THAT_COPIES=1>
                            $<$<BOOL:${HAVE_FTS}>:HAVE_FTS=1>
                            $<$<BOOL:${HAVE_CPUID}>:HAVE_CPUID=1>
+                           $<$<BOOL:${HAVE_PTHREAD_ATTR_SETSTACKSIZE}>:HAVE_PTHREAD_ATTR_SETSTACKSIZE=1>
+                           $<$<BOOL:${HAVE_PTHREAD_ATFORK}>:HAVE_PTHREAD_ATFORK>
                            )
 
 target_include_directories(tcl_config INTERFACE

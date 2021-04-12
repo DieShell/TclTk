@@ -18,8 +18,11 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
-## Checks some _r functions and generally thread safe alternatives to networking
-# related functions
+## Checks some *_r functions and generally thread safe functions as well
+# as some pthread functionality
+
+check_symbol_exists("pthread_attr_setstacksize" "pthread.h" HAVE_PTHREAD_ATTR_SETSTACKSIZE)
+check_symbol_exists("pthread_atfork"            "pthread.h" HAVE_PTHREAD_ATFORK)
 
 ## Actual system checks ##
 if (NOT DEFINED TCL_MTSAFE_GETHOSTBY_FUNCTIONS)

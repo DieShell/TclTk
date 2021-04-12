@@ -50,7 +50,7 @@ if {[expr {$argc == 2}]} {
     exit -1
 }
 
-set result [exec tktest86 $path -file $file]
+set result [exec ./tktest86 $path -file $file]
 
 puts $result
 if {[regexp {Failed\s*[1-9]} $result]} {
