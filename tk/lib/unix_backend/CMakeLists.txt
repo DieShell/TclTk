@@ -66,7 +66,7 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU"
         int main() {
             (void)XKeycodeToKeysym(0,0,0);
         }
-    ]] IS_XKB_CODE2SYM_DEPRECATED)
+    ]] IS_XKEYCODETOKEYSYM_DEPRECATED)
 endif ()
 
 cmake_pop_check_state()
@@ -75,7 +75,7 @@ cmake_pop_check_state()
 target_compile_definitions(tk_config INTERFACE
                            $<$<BOOL:${HAVE_PW_GECOS}>:HAVE_PW_GECOS=1>
                            $<$<BOOL:${X11_Xkb_FOUND}>:HAVE_XKBKEYCODETOKEYSYM=1>
-                           $<$<BOOL:${IS_XKB_CODE2SYM_DEPRECATED}>:XKBKEYCODETOKEYSYM_IS_DEPRECATED=1>
+                           $<$<BOOL:${IS_XKEYCODETOKEYSYM_DEPRECATED}>:XKBKEYCODETOKEYSYM_IS_DEPRECATED=1>
                            )
 target_include_directories(tk_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
