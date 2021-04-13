@@ -31,18 +31,18 @@ endif ()
 
 cmake_push_check_state(RESET)
 ## Headers #####################################################################
-check_include_file("sys/types.h"  HAVE_SYS_TYPES_H)
 check_include_file("sys/socket.h" HAVE_SYS_SOCKET_H)
 check_include_file("netdb.h"      HAVE_NETDB_H)
+check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
 
-if (HAVE_SYS_TYPES_H)
-    list(APPEND CMAKE_EXTRA_INCLUDE_FILES "sys/types.h")
-endif ()
 if (HAVE_SYS_SOCKET_H)
     list(APPEND CMAKE_EXTRA_INCLUDE_FILES "sys/socket.h")
 endif ()
 if (HAVE_NETDB_H)
     list(APPEND CMAKE_EXTRA_INCLUDE_FILES "netdb.h")
+endif ()
+if (HAVE_NETINET_IN_H)
+    list(APPEND CMAKE_EXTRA_INCLUDE_FILES "netinet/in.h")
 endif ()
 
 ## Types #######################################################################
@@ -82,15 +82,15 @@ if (_TCL_HAVE_RFC_FUNCS AND _TCL_HAVE_RFC_TYPES)
 endif ()
 
 ## Target ######################################################################
-target_include_directories(tcl_config PUBLIC
+target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/rfc2553>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic>
                            )
-target_compile_definitions(tcl_config PUBLIC
+target_compile_definitions(tcl_config INTERFACE
                            NEED_FAKE_RFC2553=1
                            )
 
-target_sources(tcl_config PRIVATE src/rfc2553/fake-rfc2553.c)
+target_sources(tcl PRIVATE src/rfc2553/fake-rfc2553.c)
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES

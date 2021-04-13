@@ -52,8 +52,9 @@ if (NOT HAVE_STRNCASECMP)
     endif ()
 endif ()
 
-check_type_size("((struct stat*)0)->st_blocks"  STRUCT_STAT_ST_BLOCKS)
-check_type_size("((struct stat*)0)->st_blksize" STRUCT_STAT_ST_BLKSIZE)
+check_struct_has_member("struct stat" "st_blocks"  "sys/stat.h" HAVE_STRUCT_STAT_ST_BLOCKS)
+check_struct_has_member("struct stat" "st_blksize" "sys/stat.h" HAVE_STRUCT_STAT_ST_BLKSIZE)
+
 check_type_size("blkcnt_t"                      BLKCNT_T)
 check_type_size("mode_t"                        MODE_T)
 check_type_size("pid_t"                         PID_T)

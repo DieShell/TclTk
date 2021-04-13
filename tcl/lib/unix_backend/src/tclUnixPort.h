@@ -152,7 +152,7 @@ typedef off_t		Tcl_SeekOffset;
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
 #else
-#   include "../compat/unistd.h"
+#   include <compat/unistd.h>
 #endif
 
 extern int TclUnixSetBlockingMode(int fd, int mode);
@@ -174,7 +174,7 @@ extern int TclUnixSetBlockingMode(int fd, int mode);
 #include <arpa/inet.h>		/* inet_ntoa() */
 #include <netdb.h>		/* getaddrinfo() */
 #ifdef NEED_FAKE_RFC2553
-# include "../compat/fake-rfc2553.h"
+# include <compat/fake-rfc2553.h>
 #endif
 
 /*

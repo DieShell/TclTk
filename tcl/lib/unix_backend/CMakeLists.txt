@@ -80,10 +80,10 @@ check_symbol_exists("isnan"        "math.h"             HAVE_ISNAN)
 check_struct_has_member("struct tm" "tm_tzajd" "time.h"  HAVE_TM_TZADJ)
 check_struct_has_member("struct tm" "tm_gmtoff" "time.h" HAVE_TM_GMTOFF)
 
-check_type_size("fd_set"                     FD_SET)
+check_type_size("fd_set"      FD_SET)
 if (HAVE_SYS_SELECT_H)
     list(APPEND CMAKE_EXTRA_INCLUDE_FILES "sys/select.h")
-    check_type_size("fd_mask"                    FD_MASK)
+    check_type_size("fd_mask" FD_MASK)
 endif ()
 
 check_c_source_compiles([[
@@ -236,10 +236,9 @@ target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix>
                            )
-
+                           
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclUnixInt.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclUnixPort.h"
             DESTINATION
             "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix"

@@ -45,11 +45,13 @@ target_link_libraries(tk_config INTERFACE
 set_target_properties(wish PROPERTIES
                       OUTPUT_NAME "wish${TK_DOUBLE_VERSION}"
                       POSITION_INDEPENDENT_CODE TRUE
+                      INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../lib"
                       )
 set_target_properties(tk PROPERTIES
                       PREFIX ""
                       OUTPUT_NAME "tk${TK_DOUBLE_VERSION}"
                       POSITION_INDEPENDENT_CODE TRUE
+                      INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../lib"
                       )
 set_target_properties(tkstub PROPERTIES
                       OUTPUT_NAME "tkstub${TK_DOUBLE_VERSION}"
@@ -115,7 +117,7 @@ set_source_files_properties("lib/win32_backend/src/winMain.c"
 set(TK_LIB_NAME "tk${TK_DOUBLE_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}"
     CACHE INTERNAL "" FORCE
     )
-set(TK_ACCESS_PATH ".. .. bin")
+set(TK_ACCESS_PATH ".. .. ${CMAKE_INSTALL_LIBDIR}")
 configure_file(pkgIndex.tcl.in
                pkgIndex.tcl
                @ONLY

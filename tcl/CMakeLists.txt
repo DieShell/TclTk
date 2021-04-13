@@ -38,11 +38,13 @@ target_link_libraries(tclstub PUBLIC tcl_config)
 set_target_properties(tclsh PROPERTIES
                       OUTPUT_NAME "tclsh${TCL_DOUBLE_VERSION}"
                       POSITION_INDEPENDENT_CODE TRUE
+                      INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../lib"
                       )
 set_target_properties(tcl PROPERTIES
                       PREFIX ""
                       OUTPUT_NAME "tcl${TCL_DOUBLE_VERSION}"
                       POSITION_INDEPENDENT_CODE TRUE
+                      INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../lib"
                       )
 set_target_properties(tclstub PROPERTIES
                       OUTPUT_NAME "tclstub${TCL_DOUBLE_VERSION}"
