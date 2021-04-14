@@ -156,6 +156,7 @@ set(IMPORT_LINK_S "${CMAKE_LINK_LIBRARY_FILE_FLAG}$<TARGET_LINKER_FILE_NAME:tcls
 set(DIRECT_LINK_S "${CMAKE_LINK_LIBRARY_FLAG}$<TARGET_LINKER_FILE_BASE_NAME:tclstub>")
 set(TCLSTUB_LINK_FLAG "$<IF:${IS_IMP_LIB_S},${IMPORT_LINK_S},${DIRECT_LINK_S}>")
 
+set(LIB_SFX $<${IS_IMP_LIB}:${CMAKE_IMPORT_LIBRARY_SUFFIX}>)
 configure_file(tclConfig.sh.in
                tclConfig.sh.cmakein
                @ONLY

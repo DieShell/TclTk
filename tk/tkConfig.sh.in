@@ -33,7 +33,7 @@ TK_DBGX=$<0: ^^^^ now what did I say???? >
 TK_LIB_FILE='$<TARGET_LINKER_FILE:tk>'
 
 # Additional libraries to use when linking Tk.
-TK_LIBS='$<$<BOOL:@TK_LIBS@>:@CMAKE_LINK_LIBRARY_FLAG@$<JOIN:@TK_LIBS@,$<@IS_IMP_LIB@:@CMAKE_IMPORT_LIBRARY_SUFFIX@> @CMAKE_LINK_LIBRARY_FLAG@>>'
+TK_LIBS='$<$<BOOL:@TK_LIBS@>:@CMAKE_LINK_LIBRARY_FLAG@$<JOIN:@TK_LIBS@,@LIB_SFX@ @CMAKE_LINK_LIBRARY_FLAG@>@LIB_SFX@>'
 
 # Top-level directory in which Tk's platform-independent files are
 # installed.

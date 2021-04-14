@@ -238,10 +238,22 @@ target_include_directories(tcl_config INTERFACE
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix>
                            )
 
+## Install #####################################################################
+configure_file(tcl.pc.in
+               tcl.pc.cmakein
+               @ONLY
+               )
+file(GENERATE OUTPUT tcl.pc
+     INPUT "${CMAKE_CURRENT_BINARY_DIR}/tcl.pc.cmakein"
+     )
+
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclUnixPort.h"
             DESTINATION
             "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix"
+            )
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tcl.pc"
+            DESTINATION lib/pkgconfig
             )
 endif ()

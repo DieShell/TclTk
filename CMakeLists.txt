@@ -63,6 +63,8 @@ if (HAVE_M)
 endif ()
 
 # These are for the {tcl,tk,tdbc}Config.sh files
+# AFAIK there is no way to make cmake give up this information, so we just assume
+# and hope that it works out
 if (MSVC)
     set(TCL_LD "link -dll -nologo $<$<CONFIG:Release>:-release> $<$<CONFIG:Release>:-ltcg>" CACHE INTERNAL "")
     set(TCL_AR "lib -nologo" CACHE INTERNAL "")
@@ -70,8 +72,8 @@ else ()
     # If not MSVC we assume UNIX compatible ar cr and cc -shared
     get_filename_component(CC_NAME "${CMAKE_C_COMPILER}" NAME CACHE)
     get_filename_component(AR_NAME "${CMAKE_AR}" NAME CACHE)
-    set(TCL_LD "${CC_NAME} -shared")
-    set(TCL_AR "${AR_NAME} cr")
+    set(TCL_LD "${CC_NAME} -shared" CACHE INTERNAL "")
+    set(TCL_AR "${AR_NAME} cr" CACHE INTERNAL "")
 endif ()
 
 ## Options #####################################################################
