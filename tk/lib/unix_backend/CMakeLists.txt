@@ -86,6 +86,7 @@ if (TK_ENABLE_XFT)
         target_link_libraries(tk_config INTERFACE
                               X11::Xft
                               )
+        set(TK_LIBS "${TK_LIBS};${X11_Xft_LIB}" CACHE INTERNAL "")
         target_compile_definitions(tk_config INTERFACE
                                    HAVE_XFT=1
                                    )
@@ -101,10 +102,11 @@ endif ()
 if (TK_ENABLE_XSS)
     if (X11_Xext_FOUND AND X11_Xss_FOUND)
         target_link_libraries(tk_config INTERFACE X11::Xext)
-        if (HAVE_WEAK_LINK)
-        else ()
+#        if (HAVE_WEAK_LINK) TODO
+#        else ()
             target_link_libraries(tk_config INTERFACE X11::Xss)
-        endif ()
+#        endif ()
+        set(TK_LIBS "${TK_LIBS};${X11_Xss_LIB};${X11_Xext_LIB}" CACHE INTERNAL "")
         target_compile_definitions(tk_config INTERFACE HAVE_XSS=1)
     else ()
         message(WARNING [[Xss was requested but CMake couldn't find it for us. Not using it.]])
@@ -114,4 +116,4 @@ endif ()
 target_link_libraries(tk_config INTERFACE
                       $<$<BOOL:${HAVE_XBSD}>:Xbsd>
                       )
-
+set(TK_LIBS "${TK_LIBS};$<$<BOOL:${HAVE_XBSD}>:Xbsd>" CACHE INTERNAL "")

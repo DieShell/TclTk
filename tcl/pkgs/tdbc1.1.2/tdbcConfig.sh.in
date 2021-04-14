@@ -1,0 +1,84 @@
+# tdbcConfig.sh --
+#
+# This shell script (for sh) is generated automatically by TDBC's configure
+# script. It will create shell variables for most of the configuration options
+# discovered by the configure script. This script is intended to be included
+# by the configure scripts for TDBC extensions so that they don't have to
+# figure this all out for themselves.
+#
+# The information in this file is specific to a single platform.
+#
+# RCS: @(#) $Id$
+
+# TDBC's version number
+tdbc_VERSION=@TDBC_VERSION@
+TDBC_VERSION=@TDBC_VERSION@
+
+# Name of the TDBC library - may be either a static or shared library
+tdbc_LIB_FILE=$<TARGET_FILE_NAME:tea_tdbc>
+TDBC_LIB_FILE=$<TARGET_FILE_NAME:tea_tdbc>
+
+# String to pass to the linker to pick up the TDBC library from its build dir
+tdbc_BUILD_LIB_SPEC='@CMAKE_LIBRARY_PATH_FLAG@"$<TARGET_FILE_DIR:tea_tdbc>" @TDBCSTUB_LINK_FLAG@'
+TDBC_BUILD_LIB_SPEC='@CMAKE_LIBRARY_PATH_FLAG@"$<TARGET_FILE_DIR:tea_tdbc>" @TDBCSTUB_LINK_FLAG@'
+
+# String to pass to the linker to pick up the TDBC library from its installed
+# dir.
+tdbc_LIB_SPEC='@CMAKE_LIBRARY_PATH_FLAG@"@CMAKE_INSTALL_FULL_LIBDIR@/tdbc@TDBC_VERSION@" @TDBC_LINK_FLAG@'
+TDBC_LIB_SPEC='@CMAKE_LIBRARY_PATH_FLAG@"@CMAKE_INSTALL_FULL_LIBDIR@/tdbc@TDBC_VERSION@" @TDBC_LINK_FLAG@'
+
+# Name of the TBDC stub library
+tdbc_STUB_LIB_FILE='$<TARGET_FILE_NAME:tea_tdbcstub>'
+TDBC_STUB_LIB_FILE='$<TARGET_FILE_NAME:tea_tdbcstub>'
+
+# String to pass to the linker to pick up the TDBC stub library from its
+# build directory
+tdbc_BUILD_STUB_LIB_SPEC='@CMAKE_LIBRARY_PATH_FLAG@"$<TARGET_FILE_DIR:tea_tdbcstub>" @TDBCSTUB_LINK_FLAG@'
+TDBC_BUILD_STUB_LIB_SPEC='@CMAKE_LIBRARY_PATH_FLAG@"$<TARGET_FILE_DIR:tea_tdbcstub>" @TDBCSTUB_LINK_FLAG@'
+
+# String to pass to the linker to pick up the TDBC stub library from its
+# installed directory
+tdbc_STUB_LIB_SPEC='@CMAKE_LIBRARY_PATH_FLAG@"@CMAKE_INSTALL_FULL_LIBDIR@/tdbc@TDBC_VERSION@" @TDBCSTUB_LINK_FLAG@'
+TDBC_STUB_LIB_SPEC='@CMAKE_LIBRARY_PATH_FLAG@"@CMAKE_INSTALL_FULL_LIBDIR@/tdbc@TDBC_VERSION@" @TDBCSTUB_LINK_FLAG@'
+
+# Path name of the TDBC stub library in its build directory
+tdbc_BUILD_STUB_LIB_PATH='$<TARGET_FILE:tea_tdbcstub>'
+TDBC_BUILD_STUB_LIB_PATH='$<TARGET_FILE:tea_tdbcstub>'
+
+# Path name of the TDBC stub library in its installed directory
+tdbc_STUB_LIB_PATH='@CMAKE_INSTALL_FULL_LIBDIR@/tdbc@TDBC_VERSION@/$<TARGET_FILE_NAME:tea_tdbcstub>'
+TDBC_STUB_LIB_PATH='@CMAKE_INSTALL_FULL_LIBDIR@/tdbc@TDBC_VERSION@/$<TARGET_FILE_NAME:tea_tdbcstub>'
+
+# Location of the top-level source directories from which TDBC was built.
+# This is the directory that contains doc/, generic/ and so on.  If TDBC
+# was compiled in a directory other than the source directory, this still
+# points to the location of the sources, not the location where TDBC was
+# compiled.
+# This is not defined correctly because we *REALLY* changed project layout
+# and would lead to confusion
+# Fancy ASCII art as we hope to force a failure upon use
+tdbc_SRC_DIR='\\&)*(-/SEE PROVIDED tdbcConfig.sh FOR REASONING WHY YOU SEE THIS/-)*(&\\'
+TDBC_SRC_DIR='\\&)*(-/SEE PROVIDED tdbcConfig.sh FOR REASONING WHY YOU SEE THIS/-)*(&\\'
+
+# String to pass to the compiler so that an extension can find installed TDBC
+# headers
+tdbc_INCLUDE_SPEC='-I"@CMAKE_INSTALL_FULL_INCLUDEDIR@"'
+TDBC_INCLUDE_SPEC='-I"@CMAKE_INSTALL_FULL_INCLUDEDIR@"'
+
+# String to pass to the compiler so that an extension can find TDBC headers
+# in the source directory
+tdbc_BUILD_INCLUDE_SPEC='-I"@CMAKE_CURRENT_SOURCE_DIR@/src"'
+TDBC_BUILD_INCLUDE_SPEC='-I"@CMAKE_CURRENT_SOURCE_DIR@/src"'
+
+# Path name where .tcl files in the tdbc package appear at run time.
+tdbc_LIBRARY_PATH='@CMAKE_INSTALL_FULL_LIBDIR@/tdbc@TDBC_VERSION@'
+TDBC_LIBRARY_PATH='@CMAKE_INSTALL_FULL_LIBDIR@/tdbc@TDBC_VERSION@'
+
+# Path name where .tcl files in the tdbc package appear at build time.
+tdbc_BUILD_LIBRARY_PATH='@CMAKE_CURRENT_SOURCE_DIR@/tcl'
+TDBC_BUILD_LIBRARY_PATH='@CMAKE_CURRENT_SOURCE_DIR@/tcl'
+
+# Additional flags that must be passed to the C compiler to use tdbc
+tdbc_CFLAGS=$<0:These are literally empty in the original project>
+TDBC_CFLAGS=$<0:So I'm leaving them empty. Probably legacy reasons>
+

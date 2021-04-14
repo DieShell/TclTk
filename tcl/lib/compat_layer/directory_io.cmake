@@ -116,6 +116,10 @@ if (NOT HAVE_POSIX_DIR_IO)
         target_sources(tcl PRIVATE
                        src/dirent_severe/opendir.c
                        )
+
+        set(TCL_COMPAT_FILES
+            "${TCL_COMPAT_FILES};src/dirent_severe/opendir.c"
+            CACHE INTERNAL "" FORCE)
         target_compile_definitions(tcl_config INTERFACE USE_DIRENT2_H=1)
 
         # handle extra header install

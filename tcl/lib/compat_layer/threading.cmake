@@ -31,6 +31,7 @@ if (Threads_FOUND)
                                $<$<NOT:$<PLATFORM_ID:Windows>>:_THREAD_SAFE=1>
                                )
     target_link_libraries(tcl_config INTERFACE Threads::Threads)
+    set(TCL_LIBS "${TCL_LIBS};${CMAKE_THREAD_LIBS_INIT}" CACHE INTERNAL "")
 else ()
     message(WARNING [[Threading support was requested (TCL_ENABLE_THREADS defaults to on),
 but the system doesn't seem to have a compatible threading API. Thenceforth, no threading

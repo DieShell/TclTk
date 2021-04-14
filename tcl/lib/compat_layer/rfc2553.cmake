@@ -91,6 +91,9 @@ target_compile_definitions(tcl_config INTERFACE
                            )
 
 target_sources(tcl PRIVATE src/rfc2553/fake-rfc2553.c)
+set(TCL_COMPAT_FILES
+    "${TCL_COMPAT_FILES};${CMAKE_CURRENT_SOURCE_DIR}/src/rfc2553/fake-rfc2553.c"
+    CACHE INTERNAL "" FORCE)
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES

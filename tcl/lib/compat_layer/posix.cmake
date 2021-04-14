@@ -109,6 +109,9 @@ target_sources(tcl_config INTERFACE
                $<$<NOT:$<BOOL:${HAVE_MKSTEMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/mkstemp.c>
                $<$<NOT:$<BOOL:${HAVE_GETTOD}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/gettod.c>
                )
+set(TCL_COMPAT_FILES
+    "${TCL_COMPAT_FILES};$<$<NOT:$<BOOL:${HAVE_WAITPID}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/waitpid.c>;$<$<NOT:$<BOOL:${HAVE_STRNCASECMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strncasecmp.c>;$<$<NOT:$<BOOL:${HAVE_MKSTEMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/mkstemp.c>;$<$<NOT:$<BOOL:${HAVE_GETTOD}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/gettod.c>"
+    CACHE INTERNAL "" FORCE)
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES

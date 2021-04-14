@@ -58,6 +58,9 @@ target_sources(tk PRIVATE
                src/ttk/ttkTrack.c src/ttk/ttkTreeview.c src/ttk/ttkWidget.c
                src/ttk/ttkWidget.h
                )
+if (WIN32 OR APPLE)
+    target_sources(tk PRIVATE src/tkPointer.c)
+endif ()
 target_sources(tkstub PRIVATE
                src/tkStubLib.c
                src/ttk/ttkStubLib.c

@@ -153,6 +153,9 @@ target_sources(tcl_config INTERFACE
                $<$<NOT:$<BOOL:${HAVE_STRTOL}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strtol.c>
                $<$<NOT:$<BOOL:${HAVE_STRTOUL}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strtoul.c>
                )
+set(TCL_COMPAT_FILES
+    "${TCL_COMPAT_FILES};$<$<NOT:$<BOOL:${HAVE_MEMCMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/ansic/memcmp.c>;$<$<NOT:$<BOOL:${HAVE_STRSTR}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/ansic/strstr.c>;$<$<NOT:$<BOOL:${HAVE_STRTOL}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strtol.c>;$<$<NOT:$<BOOL:${HAVE_STRTOUL}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strtoul.c>"
+    CACHE INTERNAL "" FORCE)
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES

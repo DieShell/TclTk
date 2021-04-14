@@ -100,7 +100,9 @@ target_link_options(wish PRIVATE
                     $<$<C_COMPILER_ID:GNU,Clang>:-mwindows>
                     )
 
-target_link_libraries(tk_config INTERFACE
-                      netapi32 kernel32 user32 advapi32 userenv ws2_32 gdi32
-                      comdlg32 imm32 comctl32 shell32 uuid ole32 oleaut32
-                      )
+set(TK_WIN_LIBS
+    netapi32 kernel32 user32 advapi32 userenv ws2_32 gdi32
+    comdlg32 imm32 comctl32 shell32 uuid ole32 oleaut32
+    )
+target_link_libraries(tk_config INTERFACE ${TK_WIN_LIBS})
+set(TK_LIBS "${TK_LIBS};${TK_WIN_LIBS}" CACHE INTERNAL "")

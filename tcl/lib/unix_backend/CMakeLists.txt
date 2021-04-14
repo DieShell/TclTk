@@ -201,6 +201,7 @@ cmake_pop_check_state()
 ## Xt ##########################################################################
 find_package(X11 REQUIRED Xt)
 target_link_libraries(tcl_config INTERFACE X11::Xt)
+set(TCL_LIBS "${TCL_LIBS};${X11_X11_LIB};${X11_Xt_LIB}" CACHE INTERNAL "")
 
 ## Configuration ###############################################################
 target_compile_definitions(tcl_config INTERFACE
@@ -236,7 +237,7 @@ target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix>
                            )
-                           
+
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclUnixPort.h"

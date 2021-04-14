@@ -247,7 +247,12 @@ if (TARGET tcltest)
                         )
 endif ()
 
-target_link_libraries(tcl_config INTERFACE kernel32 ws2_32 netapi32 userenv user32 advapi32)
+set(WIN_LIBS
+    kernel32 user32 gdi32 winspool shell32 ole32 oleaut32
+    uuid comdlg32 advapi32 ws2_32 netapi32 userenv
+    )
+target_link_libraries(tcl_config INTERFACE ${WIN_LIBS})
+set(TCL_LIBS "${TCL_LIBS};${WIN_LIBS}" CACHE INTERNAL "")
 
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES

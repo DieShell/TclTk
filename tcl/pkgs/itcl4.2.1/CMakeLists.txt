@@ -111,12 +111,32 @@ configure_file(src/itcl.rc.in
 add_subdirectory(tests)
 
 ## Install #####################################################################
+set(IS_IMP_LIB "$<NOT:$<STREQUAL:$<TARGET_LINKER_FILE_NAME:tea_itcl>,${CMAKE_STATIC_LIBRARY_PREFIX}$<TARGET_FILE_NAME:tea_itcl>${CMAKE_STATIC_LIBRARY_SUFFIX}>>")
+set(IMPORT_LINK "${CMAKE_LINK_LIBRARY_FILE_FLAG}$<TARGET_LINKER_FILE_NAME:tea_itcl>")
+set(DIRECT_LINK "${CMAKE_LINK_LIBRARY_FLAG}$<TARGET_LINKER_FILE_BASE_NAME:tea_itcl>")
+set(ITCL_LINK_FLAG "$<IF:${IS_IMP_LIB},${IMPORT_LINK},${DIRECT_LINK}>")
+
+set(IS_IMP_LIB_S "$<NOT:$<BOOL:${CMAKE_LINK_LIBRARY_FLAG}>>")
+set(IMPORT_LINK_S "${CMAKE_LINK_LIBRARY_FILE_FLAG}$<TARGET_LINKER_FILE_NAME:tea_itclstub>")
+set(DIRECT_LINK_S "${CMAKE_LINK_LIBRARY_FLAG}$<TARGET_LINKER_FILE_BASE_NAME:tea_itclstub>")
+set(ITCLSTUB_LINK_FLAG "$<IF:${IS_IMP_LIB_S},${IMPORT_LINK_S},${DIRECT_LINK_S}>")
+
+configure_file(itclConfig.sh.in
+               itclConfig.sh.cmakein
+               @ONLY
+               )
+file(GENERATE
+     OUTPUT itclConfig.sh
+     INPUT "${CMAKE_CURRENT_BINARY_DIR}/itclConfig.sh.cmakein"
+     )
+
 if (TCL_ENABLE_INSTALL)
     install(TARGETS tea_itcl tea_itclstub
             DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
             )
     install(FILES
             "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
+            "${CMAKE_CURRENT_BINARY_DIR}/itclConfig.sh"
             "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itcl.tcl"
             "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclHullCmds.tcl"
             "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclWidget.tcl"

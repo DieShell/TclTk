@@ -29,11 +29,8 @@ cmake_push_check_state(RESET)
 
 check_include_file("dlfcn.h" HAVE_DLFCN_H)
 if (HAVE_DLFCN_H)
-    # we also probably need -ldl if we have dlopen
-    check_library_exists("dl" "dlopen" "" HAVE_DL)
-    if (HAVE_DL)
-        target_link_libraries(tcl PRIVATE dl)
-    endif ()
+    target_link_libraries(tcl PRIVATE ${CMAKE_DL_LIBS})
+    set(TCL_LIBS "${TCL_LIBS};${CMAKE_DL_LIBS}" CACHE INTERNAL "")
 endif ()
 
 if (HAVE_DLFCN_H AND NOT APPLE) # apple is special

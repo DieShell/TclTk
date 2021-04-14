@@ -25,11 +25,12 @@ cmake_minimum_required(VERSION 3.16)
 enable_language(C)
 
 ## Policies ##
+cmake_policy(SET CMP0009 NEW) # Do not follow symlinks in GLOB_RECURSE
 cmake_policy(SET CMP0048 NEW) # project sets VERSION vars
+cmake_policy(SET CMP0070 NEW) # file(GENERATE) handles relative paths correctly
 cmake_policy(SET CMP0083 NEW) # PIE
 cmake_policy(SET CMP0091 NEW) # MSVC does not set the runtime library in CMAKE_<LANG>_FLAGS
 cmake_policy(SET CMP0092 NEW) # MSVC does not set the default /W3 in CMAKE_<LANG>_FLAGS
-cmake_policy(SET CMP0009 NEW) # Do not follow symlinks in GLOB_RECURSE
 
 ## Modules #####################################################################
 include(CMakePackageConfigHelpers)
@@ -58,6 +59,19 @@ cmake_pop_check_state()
 if (HAVE_M)
     # if libm exist we want to link it to everything
     link_libraries(m)
+    set(TCL_LIBS m CACHE INTERNAL "")
+endif ()
+
+# These are for the {tcl,tk,tdbc}Config.sh files
+if (MSVC)
+    set(TCL_LD "link -dll -nologo $<$<CONFIG:Release>:-release> $<$<CONFIG:Release>:-ltcg>" CACHE INTERNAL "")
+    set(TCL_AR "lib -nologo" CACHE INTERNAL "")
+else ()
+    # If not MSVC we assume UNIX compatible ar cr and cc -shared
+    get_filename_component(CC_NAME "${CMAKE_C_COMPILER}" NAME CACHE)
+    get_filename_component(AR_NAME "${CMAKE_AR}" NAME CACHE)
+    set(TCL_LD "${CC_NAME} -shared")
+    set(TCL_AR "${AR_NAME} cr")
 endif ()
 
 ## Options #####################################################################

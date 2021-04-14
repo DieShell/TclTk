@@ -146,10 +146,34 @@ set_source_files_properties(lib/unix_backend/src/tclUnixInit.c
 add_subdirectory(tests)
 
 ## Install #####################################################################
+set(IS_IMP_LIB  "$<NOT:$<STREQUAL:$<TARGET_LINKER_FILE_NAME:tcl>,${CMAKE_STATIC_LIBRARY_PREFIX}$<TARGET_FILE_NAME:tcl>${CMAKE_STATIC_LIBRARY_SUFFIX}>>")
+set(IMPORT_LINK "${CMAKE_LINK_LIBRARY_FILE_FLAG}$<TARGET_LINKER_FILE_NAME:tcl>")
+set(DIRECT_LINK "${CMAKE_LINK_LIBRARY_FLAG}$<TARGET_LINKER_FILE_BASE_NAME:tcl>")
+set(TCL_LINK_FLAG "$<IF:${IS_IMP_LIB},${IMPORT_LINK},${DIRECT_LINK}>")
+
+set(IS_IMP_LIB_S "$<NOT:$<BOOL:${CMAKE_LINK_LIBRARY_FLAG}>>")
+set(IMPORT_LINK_S "${CMAKE_LINK_LIBRARY_FILE_FLAG}$<TARGET_LINKER_FILE_NAME:tclstub>")
+set(DIRECT_LINK_S "${CMAKE_LINK_LIBRARY_FLAG}$<TARGET_LINKER_FILE_BASE_NAME:tclstub>")
+set(TCLSTUB_LINK_FLAG "$<IF:${IS_IMP_LIB_S},${IMPORT_LINK_S},${DIRECT_LINK_S}>")
+
+configure_file(tclConfig.sh.in
+               tclConfig.sh.cmakein
+               @ONLY
+               )
+file(GENERATE
+     OUTPUT tclConfig.sh
+     INPUT "${CMAKE_CURRENT_BINARY_DIR}/tclConfig.sh.cmakein"
+     )
+
 if (TCL_ENABLE_INSTALL)
     install(TARGETS tcl tclsh tclstub
             RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
             ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+            )
+    install(FILES
+            "${CMAKE_CURRENT_BINARY_DIR}/tclConfig.sh"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tclooConfig.sh"
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}"
             )
     if (TARGET tcl_reg)
         install(TARGETS tcl_reg
