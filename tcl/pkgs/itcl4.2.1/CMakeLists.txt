@@ -128,6 +128,7 @@ configure_file(itclConfig.sh.in
 file(GENERATE
      OUTPUT itclConfig.sh
      INPUT "${CMAKE_CURRENT_BINARY_DIR}/itclConfig.sh.cmakein"
+     CONDITION "$<CONFIG:Release>"
      )
 
 if (TCL_ENABLE_INSTALL)
@@ -136,13 +137,17 @@ if (TCL_ENABLE_INSTALL)
             )
     install(FILES
             "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_BINARY_DIR}/itclConfig.sh"
             "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itcl.tcl"
             "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclHullCmds.tcl"
             "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclWidget.tcl"
             DESTINATION
             "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
             )
+    if (CMAKE_BUILD_TYPE STREQUAL "Release")
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/itclConfig.sh"
+                DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
+                )
+    endif ()
 endif ()
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES

@@ -149,6 +149,7 @@ configure_file(tdbcConfig.sh.in
                )
 file(GENERATE OUTPUT tdbcConfig.sh
      INPUT "${CMAKE_CURRENT_BINARY_DIR}/tdbcConfig.sh.cmakein"
+     CONDITION "$<CONFIG:Release>"
      )
 
 if (TCL_ENABLE_INSTALL)
@@ -157,11 +158,15 @@ if (TCL_ENABLE_INSTALL)
             )
     install(FILES
             "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_BINARY_DIR}/tdbcConfig.sh"
             "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbc.tcl"
             DESTINATION
             "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
             )
+    if (CMAKE_BUILD_TYPE STREQUAL "Release")
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tdbcConfig.sh"
+                DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
+                )
+    endif ()
 endif ()
 if (TCL_ENABLE_INSTALL_DEVELOPMENT)
     install(FILES
