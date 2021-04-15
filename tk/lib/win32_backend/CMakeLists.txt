@@ -76,8 +76,6 @@ configure_file(manifest/wish.exe.manifest.in
                @ONLY
                )
 
-target_sources(wish PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/manifest/wish.exe.manifest")
-
 ## Configuration ###############################################################
 target_compile_definitions(tk_config INTERFACE
                            $<$<NOT:$<BOOL:${HAVE_STRTOI64}>>:NO_STRTOI64=1>
@@ -87,6 +85,7 @@ target_compile_definitions(tk_config INTERFACE
 
 target_include_directories(tk_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/manifest>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/rc>
                            )
 
@@ -94,10 +93,11 @@ target_link_options(tk_config INTERFACE
                     $<$<C_COMPILER_ID:GNU,Clang>:-municode>
                     )
 target_link_options(tkstub PRIVATE
-                    $<$<C_COMPILER_ID:MSVC>:-nodefaultlib>
+                    $<$<C_COMPILER_ID:MSVC>:/nodefaultlib>
                     )
 target_link_options(wish PRIVATE
                     $<$<C_COMPILER_ID:GNU,Clang>:-mwindows>
+                    $<$<C_COMPILER_ID:MSVC>:/manifest:no>
                     )
 
 set(TK_WIN_LIBS

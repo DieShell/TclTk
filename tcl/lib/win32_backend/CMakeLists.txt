@@ -204,7 +204,6 @@ configure_file(manifest/tclsh.exe.manifest.in
                @ONLY
                )
 
-target_sources(tclsh PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/manifest/tclsh.exe.manifest")
 if (TCL_BUILD_SHARED)
     target_sources(tcl     PRIVATE manifest/tcl86.dll.manifest)
     target_sources(tcl_dde PRIVATE manifest/tcldde14.dll.manifest)
@@ -225,6 +224,7 @@ target_compile_definitions(tcl_config INTERFACE
 
 target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/manifest>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/win>
                            )
 
@@ -237,13 +237,14 @@ target_link_options(tclstub PRIVATE
 target_link_options(tclsh PRIVATE
                     $<$<C_COMPILER_ID:GNU,Clang>:-mconsole>
                     $<$<C_COMPILER_ID:GNU,Clang>:-Wl,--stack,2300000>
-                    $<$<C_COMPILER_ID:MSVC>:-stack:2300000>
+                    $<$<C_COMPILER_ID:MSVC>:/stack:2300000>
+                    $<$<C_COMPILER_ID:MSVC>:/manifest:no>
                     )
 if (TARGET tcltest)
     target_link_options(tcltest PRIVATE
                         $<$<C_COMPILER_ID:GNU,Clang>:-mconsole>
                         $<$<C_COMPILER_ID:GNU,Clang>:-Wl,--stack,2300000>
-                        $<$<C_COMPILER_ID:MSVC>:-stack:2300000>
+                        $<$<C_COMPILER_ID:MSVC>:/stack:2300000>
                         )
 endif ()
 
