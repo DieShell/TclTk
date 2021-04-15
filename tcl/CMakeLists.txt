@@ -164,6 +164,7 @@ configure_file(tclConfig.sh.in
 file(GENERATE
      OUTPUT tclConfig.sh
      INPUT "${CMAKE_CURRENT_BINARY_DIR}/tclConfig.sh.cmakein"
+     CONDITION "$<CONFIG:Release>"
      )
 
 if (TCL_ENABLE_INSTALL)
@@ -171,11 +172,13 @@ if (TCL_ENABLE_INSTALL)
             RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
             ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
             )
-    install(FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/tclConfig.sh"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tclooConfig.sh"
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-            )
+    if (CMAKE_BUILD_TYPE STREQUAL Release)
+        install(FILES
+                "${CMAKE_CURRENT_BINARY_DIR}/tclConfig.sh"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tclooConfig.sh"
+                DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+                )
+    endif ()
     if (TARGET tcl_reg)
         install(TARGETS tcl_reg
                 DESTINATION "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"

@@ -147,6 +147,7 @@ configure_file(tkConfig.sh.in
 file(GENERATE
      OUTPUT tkConfig.sh
      INPUT "${CMAKE_CURRENT_BINARY_DIR}/tkConfig.sh.cmakein"
+     CONDITION "$<CONFIG:Release>"
      )
 
 if (TCL_ENABLE_INSTALL)
@@ -155,9 +156,11 @@ if (TCL_ENABLE_INSTALL)
             "${CMAKE_CURRENT_SOURCE_DIR}/lib/unix_backend/src/tkAppInit.c"
             DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}"
             )
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tkConfig.sh"
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-            )
+    if (CMAKE_BUILD_TYPE STREQUAL "Release")
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tkConfig.sh"
+                DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+                )
+    endif ()
     install(TARGETS tk wish tkstub
             RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
             ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"

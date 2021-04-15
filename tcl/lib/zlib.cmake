@@ -28,18 +28,17 @@ include("${CMAKE_CURRENT_BINARY_DIR}/GetDependency.cmake")
 
 if (TCL_ENABLE_STATIC_ZLIB)
     set(Z_ENABLE_SHARED OFF CACHE BOOL "" FORCE)
-    set(TCL_LINK_Z "zlib::zlibstatic" CACHE INTERNAL "")
+    set(TCL_LINK_Z "z::zlibstatic" CACHE INTERNAL "")
 else ()
-    set(Z_ENABLE_STATIC OFF CACHE BOOL "" FORCE)
-    set(TCL_LINK_Z "zlib::zlib" CACHE INTERNAL "")
+    set(Z_ENABLE_STATIC ON  CACHE BOOL "" FORCE)
+    set(TCL_LINK_Z "z::zlib" CACHE INTERNAL "")
 endif ()
-GetDependency(zlib
+GetDependency(z
               REPOSITORY_URL "https://github.com/DieShell/zlib.git"
-              VERSION "branch-sama"
-              REMOTE_ONLY
+              VERSION "v1.2.11"
               )
 
 target_link_libraries(tcl_config INTERFACE 
                       "${TCL_LINK_Z}"
-                      $<$<BOOL:${TCL_BUILD_64BIT}>:zlib::z64>
+                      $<$<BOOL:${TCL_BUILD_64BIT}>:z::z64>
                       )
