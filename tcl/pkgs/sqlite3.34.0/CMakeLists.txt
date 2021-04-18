@@ -36,6 +36,13 @@ option(TEA_SQLITE_ENABLE_THREADS
 option(TEA_SQLITE_BUILD_SHARED
        "Build TEA SQLite as a shared library [On]" On
        )
+option(TEA_ENABLE_SQLITE
+       "Enable building SQLite [On]" On
+       )
+
+if (NOT TEA_ENABLE_SQLITE)
+    return()
+endif ()
 
 # Option integrity checks
 if (NOT TEA_SQLITE_ENABLE_THREADS
@@ -164,17 +171,17 @@ configure_file(pkgIndex.tcl.in
 add_subdirectory(tests)
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(TARGETS tea_sqlite
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                TARGETS tea_sqlite
+                    RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
+            DEFAULT
+                TARGETS tea_sqlite
+                    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/spaceanal.tcl"
+                    RENAME sqlite3_analyzer
+                    DESTINATION "${CMAKE_INSTALL_BINDIR}"
             )
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/spaceanal.tcl"
-            RENAME sqlite3_analyzer
-            DESTINATION "${CMAKE_INSTALL_BINDIR}"
-            )
-    install(FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
-            )
-endif ()
+#&!on

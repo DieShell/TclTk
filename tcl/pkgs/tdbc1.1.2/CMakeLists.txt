@@ -37,12 +37,18 @@ option(TEA_TDBC_ENABLE_THREADS
 option(TEA_TDBC_BUILD_SHARED
        "Build TEA TDBC as a shared library [On]" On
        )
+option(TEA_ENABLE_TDBC
+       "Enable building TDBC [On]" On
+       )
 
+if (NOT TEA_ENABLE_TDBC)
+    return()
+endif ()
 # Option integrity checks
 if (NOT TEA_TDBC_ENABLE_THREADS
     AND TCL_ENABLE_THREADS)
-        message(SEND_ERROR
-"A non-threaded extension may only run in a non-threaded Tcl core.
+    message(SEND_ERROR
+            "A non-threaded extension may only run in a non-threaded Tcl core.
 Reconfigure with TCL_ENABLE_THREADS=0, or TEA_SQLITE_ENABLE_THREADS=1"
             )
 endif ()
@@ -71,7 +77,7 @@ add_library(tea_tdbcstub STATIC
             )
 add_library(tea_tdbc_config INTERFACE)
 
-target_link_libraries(tea_tdbc     PRIVATE tea_tdbc_config)
+target_link_libraries(tea_tdbc PRIVATE tea_tdbc_config)
 target_link_libraries(tea_tdbcstub PRIVATE tea_tdbc_config)
 
 target_compile_definitions(tea_tdbc PRIVATE
@@ -106,7 +112,7 @@ set_target_properties(tea_tdbcstub PROPERTIES
 set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/tdbc.rc
                             TARGET_DIRECTORY tea_tdbc
                             PROPERTIES
-                                COMPILE_DEFINITIONS "$<$<CONFIG:Debug>:DEBUG>"
+                            COMPILE_DEFINITIONS "$<$<CONFIG:Debug>:DEBUG>"
                             )
 target_include_directories(tea_tdbcstub PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
@@ -114,12 +120,12 @@ target_include_directories(tea_tdbcstub PUBLIC
                            )
 
 ## Configuration ###############################################################
-set(TCL_VERSION_REQ     "8.5-")
+set(TCL_VERSION_REQ "8.5-")
 set(TCL_VERSION_DESIRED "${TCL_VERSION}")
-set(TCLOO_VERSION_REQ   "1.0")
-set(PACKAGE_NAME        "tdbc")
-set(PACKAGE_VERSION     "${TDBC_VERSION}")
-set(PKG_LIB_FILE        "tdbc${TDBC_DOTLESS_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+set(TCLOO_VERSION_REQ "1.0")
+set(PACKAGE_NAME "tdbc")
+set(PACKAGE_VERSION "${TDBC_VERSION}")
+set(PKG_LIB_FILE "tdbc${TDBC_DOTLESS_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
 configure_file(pkgIndex.tcl.in
                pkgIndex.tcl
                @ONLY
@@ -153,27 +159,27 @@ file(GENERATE OUTPUT tdbcConfig.sh
      )
 
 if (TCL_ENABLE_INSTALL)
-    install(TARGETS tea_tdbc tea_tdbcstub
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
-            )
-    install(FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbc.tcl"
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
-            )
-    if (CMAKE_BUILD_TYPE STREQUAL "Release")
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tdbcConfig.sh"
-                DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
+    #&!off
+    tcl_install(RUNTIME_ONLY
+                    TARGETS tea_tdbc
+                        RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
+                    FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbc.tcl"
+                        DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
+                DEFAULT
+                    TARGETS tea_tdbc
+                        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
+                    TARGETS tea_tdbcstub
+                        RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
+                        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
+                DEVELOPMENT
+                    FILES "${CMAKE_CURRENT_BINARY_DIR}/tdbcConfig.sh"
+                        CONFIGURATIONS "Release"
+                        DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
+                    FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/tdbc.h"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/src/tdbcDecls.h"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/src/tdbcInt.h"
+                        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
                 )
-    endif ()
-endif ()
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tdbc.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tdbcDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tdbcInt.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}"
-            )
+    #&!on
 endif ()

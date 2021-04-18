@@ -255,11 +255,10 @@ set(WIN_LIBS
 target_link_libraries(tcl_config INTERFACE ${WIN_LIBS})
 set(TCL_LIBS "${TCL_LIBS};${WIN_LIBS}" CACHE INTERNAL "")
 
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclWinInt.h"
+#&!off
+tcl_install(DEVELOPMENT
+            FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/tclWinInt.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/tclWinPort.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/win"
+            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/win"
             )
-endif ()
+#&!on

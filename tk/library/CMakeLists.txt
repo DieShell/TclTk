@@ -36,18 +36,43 @@ if (TCL_ENABLE_TESTS)
 endif ()
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(FILES
-            bgerror.tcl button.tcl choosedir.tcl clrpick.tcl comdlg.tcl console.tcl
-            dialog.tcl entry.tcl focus.tcl fontchooser.tcl iconlist.tcl icons.tcl
-            listbox.tcl megawidget.tcl menu.tcl mkpsenc.tcl msgbox.tcl obsolete.tcl
-            optMenu.tcl palette.tcl panedwindow.tcl safetk.tcl scale.tcl scrlbar.tcl
-            spinbox.tcl tearoff.tcl text.tcl tk.tcl tkfbox.tcl unsupported.tcl
-            xmfbox.tcl tclIndex
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/bgerror.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/button.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/choosedir.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/clrpick.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/comdlg.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/console.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/dialog.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/entry.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/focus.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/fontchooser.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/iconlist.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/icons.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/listbox.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/megawidget.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/menu.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/mkpsenc.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/msgbox.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/obsolete.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/optMenu.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/palette.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/panedwindow.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/safetk.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/scale.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/scrlbar.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/spinbox.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tearoff.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/text.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tk.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tkfbox.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/unsupported.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/xmfbox.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tclIndex"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}"
             )
-endif ()
+#&!on
 
 add_subdirectory(demos)
 add_subdirectory(images)

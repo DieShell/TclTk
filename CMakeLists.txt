@@ -80,6 +80,9 @@ endif ()
 option(TCL_ENABLE_INSTALL
        "Enable the Tcl runtime install target [On]" On
        )
+option(TCL_ENABLE_INSTALL_RUNTIME_ONLY
+       "Do not install executables and static libraries [Off]" Off
+       )
 option(TCL_ENABLE_INSTALL_DEVELOPMENT
        "Enable install Tcl's development required files [Off]" Off
        )
@@ -190,6 +193,9 @@ if (TCL_ENABLE_TESTS)
     set(TK_TEST_LIBRARY "${CMAKE_BINARY_DIR}/lib/tk${TK_VERSION}" CACHE INTERNAL "")
     include(CTest)
 endif ()
+
+## Utilities ###################################################################
+include(cmake/utils.cmake)
 
 # Windows is funky with its subsystems
 if (WIN32)

@@ -27,6 +27,13 @@ project(TEA-TDBC-PostgreSQL
 option(TEA_TDBC_POSTGRES_ENABLE_TESTS
        "Enable running tests for the TDBC PostgreSQL connector [Off]" Off
        )
+option(TEA_ENABLE_TDBC_POSTGRES
+       "Enable building TDBC PostgreSQL connector [${TEA_ENABLE_TDBC}]" "${TEA_ENABLE_TDBC}"
+       )
+
+if (NOT TEA_ENABLE_TDBC_POSTGRES)
+    return()
+endif ()
 
 ## System checks ###############################################################
 cmake_push_check_state(RESET)
@@ -89,22 +96,19 @@ configure_file(pkgIndex.tcl.in
 add_subdirectory(tests)
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(TARGETS tea_tdbc_pq
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                TARGETS tea_tdbc_pq
+                    RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcpostgres.tcl"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
+            DEFAULT
+                TARGETS tea_tdbc_pq
+                    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
+            DEVELOPMENT
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/fakepq.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/pqStubs.h"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
             )
-    install(FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcpostgres.tcl"
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
-            )
-endif ()
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/fakepq.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/pqStubs.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}"
-            )
-endif ()
+#&!on

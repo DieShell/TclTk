@@ -27,16 +27,22 @@ project(TEA-TDBC-ODBC
 option(TEA_TDBC_ODBC_ENABLE_THREADS
        "Enable the use of threads in TEA TDBC_ODBC [${TEA_USE_THREADS}]" "${TEA_USE_THREADS}"
        )
-
 option(TEA_TDBC_ODBC_ENABLE_TESTS
        "Enable running tests for the TDBC ODBC connector [Off]" Off
        )
+option(TEA_ENABLE_TDBC_ODBC
+       "Enable building TDBC ODBC connector [${TEA_ENABLE_TDBC}]" "${TEA_ENABLE_TDBC}"
+       )
+
+if (NOT TEA_ENABLE_TDBC_ODBC)
+    return()
+endif ()
 
 # Option integrity checks
 if (NOT TEA_TDBC_ODBC_ENABLE_THREADS
     AND TCL_ENABLE_THREADS)
-        message(SEND_ERROR
-"A non-threaded extension may only run in a non-threaded Tcl core.
+    message(SEND_ERROR
+            "A non-threaded extension may only run in a non-threaded Tcl core.
 Reconfigure with TCL_ENABLE_THREADS=0, or TEA_SQLITE_ENABLE_THREADS=1"
             )
 endif ()
@@ -44,7 +50,7 @@ endif ()
 ## System checks ###############################################################
 cmake_push_check_state(RESET)
 check_type_size("long long" LONG_LONG)
-check_type_size("long"      LONG)
+check_type_size("long" LONG)
 
 cmake_pop_check_state()
 
@@ -89,11 +95,11 @@ set_target_properties(tea_tdbc_odbc PROPERTIES
                       )
 
 ## Configuration ###############################################################
-set(TCL_VERSION_REQ     "8.6")
-set(TCLOO_VERSION_REQ   "1.0")
-set(PACKAGE_NAME        "tdbcodbc")
-set(PACKAGE_VERSION     "${TDBC_VERSION}")
-set(PKG_LIB_FILE        "tdbcodbc${TDBC_ODBC_DOTLESS_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+set(TCL_VERSION_REQ "8.6")
+set(TCLOO_VERSION_REQ "1.0")
+set(PACKAGE_NAME "tdbcodbc")
+set(PACKAGE_VERSION "${TDBC_VERSION}")
+set(PKG_LIB_FILE "tdbcodbc${TDBC_ODBC_DOTLESS_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
 configure_file(pkgIndex.tcl.in
                pkgIndex.tcl
                @ONLY
@@ -103,22 +109,19 @@ configure_file(pkgIndex.tcl.in
 add_subdirectory(tests)
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(TARGETS tea_tdbc_odbc
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                TARGETS tea_tdbc_odbc
+                    RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcodbc.tcl"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
+            DEFAULT
+                TARGETS tea_tdbc_odbc
+                    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
+            DEVELOPMENT
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/fakesql.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/odbcStubs.h"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
             )
-    install(FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcodbc.tcl"
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
-            )
-endif ()
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/fakesql.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/odbcStubs.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}"
-            )
-endif ()
+#&!on

@@ -146,7 +146,7 @@ set_source_files_properties(lib/unix_backend/src/tclUnixInit.c
 add_subdirectory(tests)
 
 ## Install #####################################################################
-set(IS_IMP_LIB  "$<NOT:$<STREQUAL:$<TARGET_LINKER_FILE_NAME:tcl>,${CMAKE_STATIC_LIBRARY_PREFIX}$<TARGET_FILE_NAME:tcl>${CMAKE_STATIC_LIBRARY_SUFFIX}>>")
+set(IS_IMP_LIB "$<NOT:$<STREQUAL:$<TARGET_LINKER_FILE_NAME:tcl>,${CMAKE_STATIC_LIBRARY_PREFIX}$<TARGET_FILE_NAME:tcl>${CMAKE_STATIC_LIBRARY_SUFFIX}>>")
 set(IMPORT_LINK "${CMAKE_LINK_LIBRARY_FILE_FLAG}$<TARGET_LINKER_FILE_NAME:tcl>")
 set(DIRECT_LINK "${CMAKE_LINK_LIBRARY_FLAG}$<TARGET_LINKER_FILE_BASE_NAME:tcl>")
 set(TCL_LINK_FLAG "$<IF:${IS_IMP_LIB},${IMPORT_LINK},${DIRECT_LINK}>")
@@ -167,26 +167,38 @@ file(GENERATE
      CONDITION "$<CONFIG:Release>"
      )
 
-if (TCL_ENABLE_INSTALL)
-    install(TARGETS tcl tclsh tclstub
-            RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-            ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                TARGETS tcl
+                    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+            DEFAULT
+                TARGETS tcl
+                    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+                TARGETS tclsh tclstub
+                    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+                    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+            DEVELOPMENT
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/tclConfig.sh"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tclooConfig.sh"
+                    CONFIGURATIONS "Release"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}"
             )
-    if (CMAKE_BUILD_TYPE STREQUAL Release)
-        install(FILES
-                "${CMAKE_CURRENT_BINARY_DIR}/tclConfig.sh"
-                "${CMAKE_CURRENT_SOURCE_DIR}/tclooConfig.sh"
-                DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-                )
-    endif ()
-    if (TARGET tcl_reg)
-        install(TARGETS tcl_reg
-                DESTINATION "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
-                )
-    endif ()
-    if (TARGET tcl_dde)
-        install(TARGETS tcl_dde
-                DESTINATION "${CMAKE_INSTALL_LIBDIR}/dde${TCL_DDE_VERSION}"
-                )
-    endif ()
-endif ()
+tcl_install(RUNTIME_ONLY
+            CONDITION [[WIN32]]
+                TARGETS tcl_reg
+                RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
+            DEFAULT
+            CONDITION [[WIN32]]
+                TARGETS tcl_reg
+                ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
+            )
+tcl_install(RUNTIME_ONLY
+            CONDITION [[WIN32]]
+                TARGETS tcl_dde
+                RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/dde${TCL_DDE_VERSION}"
+            DEFAULT
+            CONDITION [[WIN32]]
+                TARGETS tcl_dde
+                ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/dde${TCL_DDE_VERSION}"
+            )
+#&!on

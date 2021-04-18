@@ -39,22 +39,21 @@ if (TCL_ENABLE_TESTS)
 endif ()
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/auto.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/clock.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/history.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/init.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/package.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/parray.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/safe.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tclIndex"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tm.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/word.tcl"
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/auto.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/clock.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/history.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/init.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/package.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/parray.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/safe.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tclIndex"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tm.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/word.tcl"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}"
             )
-endif ()
+#&!on
 
 add_subdirectory(dde)
 add_subdirectory(encoding)

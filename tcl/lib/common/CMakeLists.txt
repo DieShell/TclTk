@@ -95,40 +95,36 @@ set(PKG_CONFIG_LIST
     "CFG_RUNTIME_DOCDIR=\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_MANDIR}\""
     CACHE INTERNAL "")
 
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tcl.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOO.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOODecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclPlatDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMath.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMathDecls.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}"
+#&!off
+tcl_install(DEVELOPMENT
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/tcl.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOO.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOODecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclPlatDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMath.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMathDecls.h"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/tcl.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclFileSystem.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclInt.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclIntDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclIntPlatDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclIO.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOO.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOODecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOOInt.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOOIntDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclParse.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclPlatDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclPort.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclRegexp.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclStringRep.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclStringTrim.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMath.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMathDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMathInt.h"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic"
             )
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tcl.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclFileSystem.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclInt.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclIntDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclIntPlatDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclIO.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOO.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOODecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOOInt.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclOOIntDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclParse.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclPlatDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclPort.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclRegexp.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclStringRep.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclStringTrim.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMath.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMathDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclTomMathInt.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic"
-            )
-endif ()
+#&!on

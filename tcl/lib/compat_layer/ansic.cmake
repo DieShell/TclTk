@@ -157,12 +157,11 @@ set(TCL_COMPAT_FILES
     "${TCL_COMPAT_FILES};$<$<NOT:$<BOOL:${HAVE_MEMCMP}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/ansic/memcmp.c>;$<$<NOT:$<BOOL:${HAVE_STRSTR}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/ansic/strstr.c>;$<$<NOT:$<BOOL:${HAVE_STRTOL}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strtol.c>;$<$<NOT:$<BOOL:${HAVE_STRTOUL}>>:${CMAKE_CURRENT_SOURCE_DIR}/src/strtoul.c>"
     CACHE INTERNAL "" FORCE)
 
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            $<$<NOT:$<BOOL:${HAVE_FLOAT_H}>>:src/ansic/compat/float.h>
-            $<$<NOT:$<BOOL:${HAVE_STDLIB_H}>>:src/ansic/compat/stdlib.h>
-            $<$<NOT:$<BOOL:${HAVE_STRING_H}>>:src/ansic/compat/string.h>
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
+#&!off
+tcl_install(DEVELOPMENT
+                FILES $<$<NOT:$<BOOL:${HAVE_FLOAT_H}>>:src/ansic/compat/float.h>
+                      $<$<NOT:$<BOOL:${HAVE_STDLIB_H}>>:src/ansic/compat/stdlib.h>
+                      $<$<NOT:$<BOOL:${HAVE_STRING_H}>>:src/ansic/compat/string.h>
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
             )
-endif ()
+#&!on

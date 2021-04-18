@@ -32,9 +32,10 @@ if (TCL_ENABLE_TESTS)
 endif ()
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(DIRECTORY .
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}/msgs"
-            FILES_MATCHING PATTERN "*.msg"
+#&!off
+tcl_install(RUNTIME_ONLY
+                DIRECTORY .
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}/msgs"
+                    PATTERN "CMakeLists.txt" EXCLUDE
             )
-endif ()
+#&!on

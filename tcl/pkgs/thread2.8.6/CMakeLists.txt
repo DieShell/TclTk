@@ -27,6 +27,13 @@ project(TEA-Thread
 option(TEA_THREADS_ENABLE_TESTS
        "Enable running tests for the thread library [On]" On
        )
+option(TEA_ENABLE_THREAD
+       "Enable building the thread extension library [On]" On
+       )
+
+if (NOT TEA_ENABLE_THREAD)
+    return()
+endif ()
 
 ## Target ######################################################################
 add_library(tea_thread SHARED
@@ -92,21 +99,18 @@ configure_file(src/thread.rc.in
 add_subdirectory(tests)
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(TARGETS tea_thread
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                TARGETS tea_thread
+                    RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tcl/ttrace.tcl"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
+            DEFAULT
+                TARGETS tea_thread
+                    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
+            DEVELOPMENT
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/tclThread.h"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
             )
-    install(FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/ttrace.tcl"
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
-            )
-endif ()
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclThread.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}"
-            )
-endif ()
+#&!on

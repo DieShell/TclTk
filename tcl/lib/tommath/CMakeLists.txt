@@ -5,11 +5,11 @@
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
 # arising from the use of this software.
-# 
+#
 # Permission is granted to anyone to use this software for any purpose,
 # including commercial applications, and to alter it and redistribute it
 # freely, subject to the following restrictions:
-# 
+#
 # 1. The origin of this software must not be misrepresented; you must not
 #    claim that you wrote the original software. If you use this software
 #    in a product, an acknowledgment in the product documentation would be
@@ -25,7 +25,7 @@ project(tcl_tommath C)
 ## System checks ##############################################################
 cmake_push_check_state(RESET)
 
-# Includes 
+# Includes
 check_include_file("stdint.h" HAVE_STDINT_H)
 check_include_file("stdio.h"  HAVE_STDIO_H)
 list(APPEND CMAKE_EXTRA_INCLUDE_FILES "stdio.h")
@@ -36,7 +36,7 @@ check_type_size("FILE" STDIO_FILE)
 cmake_pop_check_state()
 
 ## Options ####################################################################
-set(TCL_MP_PRECISION 4 CACHE STRING 
+set(TCL_MP_PRECISION 4 CACHE STRING
     "The precision used in tommath [4]"
     )
 
@@ -105,7 +105,7 @@ target_sources(tcl PRIVATE
                src/bn_s_mp_sub.c
                src/bn_s_mp_toom_mul.c
                src/bn_s_mp_toom_sqr.c
-               
+
                src/tommath.h
                src/tommath_class.h
                src/tommath_cutoffs.h
@@ -120,15 +120,14 @@ target_compile_definitions(tcl_config INTERFACE
                            MP_FIXED_CUTOFFS=1
                            "MP_PREC=${TCL_MP_PRECISION}"
                            )
-target_include_directories(tcl_config INTERFACE 
+target_include_directories(tcl_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic>
                            )
 
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES 
-            "src/tommath.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic"
+#&!off
+tcl_install(DEVELOPMENT
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/tommath.h"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic"
             )
-endif ()
+#&!on

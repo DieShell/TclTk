@@ -55,32 +55,32 @@ set(TCL_WITH_ENCODING "iso8895-1" CACHE STRING
 ## System checks ###############################################################
 cmake_push_check_state(RESET)
 
-check_include_file("termios.h"    HAVE_TERMIOS_H)
-check_include_file("sys/ioctl.h"  HAVE_SYS_IOCTL_H)
-check_include_file("sys/modem.h"  HAVE_SYS_MODEM_H)
-check_include_file("sys/filio.h"  HAVE_SYS_FILIO_H)
+check_include_file("termios.h" HAVE_TERMIOS_H)
+check_include_file("sys/ioctl.h" HAVE_SYS_IOCTL_H)
+check_include_file("sys/modem.h" HAVE_SYS_MODEM_H)
+check_include_file("sys/filio.h" HAVE_SYS_FILIO_H)
 check_include_file("sys/select.h" HAVE_SYS_SELECT_H)
-check_include_file("net/errno.h"  HAVE_NET_ERRNO_H)
-check_include_file("fts.h"        HAVE_FTS_H)
+check_include_file("net/errno.h" HAVE_NET_ERRNO_H)
+check_include_file("fts.h" HAVE_FTS_H)
 
-check_symbol_exists("getcwd"       "unistd.h"           HAVE_GETCWD)
-check_symbol_exists("getwd"        "unistd.h"           HAVE_GETWD)
-check_symbol_exists("strerror"     "string.h"           HAVE_STRERROR)
-check_symbol_exists("uname"        "sys/utsname.h"      HAVE_UNAME)
-check_symbol_exists("wait3"        "sys/wait.h"         HAVE_WAIT3)
-check_symbol_exists("realpath"     "stdlib.h"           HAVE_REALPATH)
-check_symbol_exists("gmtime_r"     "sys/types.h;time.h" HAVE_GMTIME_R)
-check_symbol_exists("localtime_r"  "sys/types.h;time.h" HAVE_LOCALTIME_R)
-check_symbol_exists("mktime"       "sys/types.h;time.h" HAVE_MKTIME)
-check_symbol_exists("fstatfs"      "sys/statfs.h"       HAVE_FSTATFS)
-check_symbol_exists("mkstemps"     "stdlib.h"           HAVE_MKSTEMPS)
-check_symbol_exists("chflags"      "sys/stat.h"         HAVE_CHFLAGS)
-check_symbol_exists("isnan"        "math.h"             HAVE_ISNAN)
+check_symbol_exists("getcwd" "unistd.h" HAVE_GETCWD)
+check_symbol_exists("getwd" "unistd.h" HAVE_GETWD)
+check_symbol_exists("strerror" "string.h" HAVE_STRERROR)
+check_symbol_exists("uname" "sys/utsname.h" HAVE_UNAME)
+check_symbol_exists("wait3" "sys/wait.h" HAVE_WAIT3)
+check_symbol_exists("realpath" "stdlib.h" HAVE_REALPATH)
+check_symbol_exists("gmtime_r" "sys/types.h;time.h" HAVE_GMTIME_R)
+check_symbol_exists("localtime_r" "sys/types.h;time.h" HAVE_LOCALTIME_R)
+check_symbol_exists("mktime" "sys/types.h;time.h" HAVE_MKTIME)
+check_symbol_exists("fstatfs" "sys/statfs.h" HAVE_FSTATFS)
+check_symbol_exists("mkstemps" "stdlib.h" HAVE_MKSTEMPS)
+check_symbol_exists("chflags" "sys/stat.h" HAVE_CHFLAGS)
+check_symbol_exists("isnan" "math.h" HAVE_ISNAN)
 
-check_struct_has_member("struct tm" "tm_tzajd" "time.h"  HAVE_TM_TZADJ)
+check_struct_has_member("struct tm" "tm_tzajd" "time.h" HAVE_TM_TZADJ)
 check_struct_has_member("struct tm" "tm_gmtoff" "time.h" HAVE_TM_GMTOFF)
 
-check_type_size("fd_set"      FD_SET)
+check_type_size("fd_set" FD_SET)
 if (HAVE_SYS_SELECT_H)
     list(APPEND CMAKE_EXTRA_INCLUDE_FILES "sys/select.h")
     check_type_size("fd_mask" FD_MASK)
@@ -137,7 +137,7 @@ main() {
 
 if (NOT DEFINED TCL_PUTENV_CHECKED)
     file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/putenv-copies.c"
-        [[
+         [[
         #include <stdlib.h>
         #include <string.h>
         int
@@ -164,8 +164,8 @@ include(thread_safe.cmake)
 
 ## can we use fts instead of readdir
 if (HAVE_FTS_H)
-    check_symbol_exists("fts_open"  "fts.h" HAVE_FTS_OPEN)
-    check_symbol_exists("fts_read"  "fts.h" HAVE_FTS_READ)
+    check_symbol_exists("fts_open" "fts.h" HAVE_FTS_OPEN)
+    check_symbol_exists("fts_read" "fts.h" HAVE_FTS_READ)
     check_symbol_exists("fts_close" "fts.h" HAVE_FTS_CLOSE)
 
     if (HAVE_FTS_OPEN AND HAVE_FTS_READ AND HAVE_FTS_CLOSE)
@@ -247,13 +247,11 @@ file(GENERATE OUTPUT tcl.pc
      INPUT "${CMAKE_CURRENT_BINARY_DIR}/tcl.pc.cmakein"
      )
 
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tclUnixPort.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix"
+#&!off
+tcl_install(DEVELOPMENT
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/tclUnixPort.h"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/unix"
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/tcl.pc"
+                    DESTINATION lib/pkgconfig
             )
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tcl.pc"
-            DESTINATION lib/pkgconfig
-            )
-endif ()
+#&!on

@@ -24,9 +24,9 @@ if (TCL_ENABLE_TESTS)
     add_custom_command(OUTPUT "${TK_TEST_LIBRARY}/demos/anilabel.tcl"
                        MAIN_DEPENDENCY anilabel.tcl
                        COMMENT "Copying demos for tktest"
-                       COMMAND 
+                       COMMAND
                        "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}"
-                                                            "${TK_TEST_LIBRARY}/demos"
+                       "${TK_TEST_LIBRARY}/demos"
                        )
     add_custom_target(TkTest-Demos ALL
                       DEPENDS "${TK_TEST_LIBRARY}/demos/anilabel.tcl"
@@ -34,9 +34,10 @@ if (TCL_ENABLE_TESTS)
 endif ()
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(DIRECTORY .
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}/demos"
-            PATTERN "CMakeLists.txt" EXCLUDE
+#&!off
+tcl_install(DEFAULT
+                DIRECTORY .
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}/demos"
+                    PATTERN "CMakeLists.txt" EXCLUDE
             )
-endif()
+#&!on

@@ -100,13 +100,13 @@ if (NOT HAVE_POSIX_DIR_IO)
         target_compile_definitions(tcl_config INTERFACE NO_DIRENT_H=1)
 
         # handle extra header install
-        if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-            install(FILES
-                    "${CMAKE_CURRENT_SOURCE_DIR}/src/dirent_bsd/compat/dirent.h"
-                    DESTINATION
-                    "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
+        #&!off
+        tcl_install(DEVELOPMENT
+                        FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/dirent_bsd/compat/dirent.h"
+                            DESTINATION
+                            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
                     )
-        endif ()
+        #&!on
     else ()
         # all hope is lost
         target_include_directories(tcl_config INTERFACE
@@ -123,13 +123,13 @@ if (NOT HAVE_POSIX_DIR_IO)
         target_compile_definitions(tcl_config INTERFACE USE_DIRENT2_H=1)
 
         # handle extra header install
-        if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-            install(FILES
-                    "${CMAKE_CURRENT_SOURCE_DIR}/src/dirent_severe/compat/dirent2.h"
-                    DESTINATION
-                    "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
+        #&!off
+        tcl_install(DEVELOPMENT
+                        FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/dirent_severe/compat/dirent2.h"
+                            DESTINATION
+                            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
                     )
-        endif ()
+        #&!on
     endif ()
 endif ()
 

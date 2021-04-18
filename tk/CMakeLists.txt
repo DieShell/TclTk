@@ -150,19 +150,21 @@ file(GENERATE
      CONDITION "$<CONFIG:Release>"
      )
 
-if (TCL_ENABLE_INSTALL)
-    install(FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/lib/unix_backend/src/tkAppInit.c"
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                TARGETS tk
+                    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}"
+            DEFAULT
+                TARGETS tk tkstub wish
+                    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+                    ARCHIVE DESTINATION "${CMAKE_INSTALL_BINDIR}"
+            DEVELOPMENT
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/tkConfig.sh"
+                    CONFIGURATIONS "Release"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/lib/unix_backend/src/tkAppInit.c"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}"
             )
-    if (CMAKE_BUILD_TYPE STREQUAL "Release")
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tkConfig.sh"
-                DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-                )
-    endif ()
-    install(TARGETS tk wish tkstub
-            RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-            ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-            )
-endif ()
+#&!on

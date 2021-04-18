@@ -55,13 +55,12 @@ if (HAVE_SYS_LDR_H AND HAVE_LDFCN_H AND HAVE_A_OUT_H)
                    src/dynamic/tclLoadDl.c
                    )
 
-    if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-        install(FILES
-                "${CMAKE_CURRENT_SOURCE_DIR}/src/dynamic/dlfcn.h"
-                DESTINATION
-                "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/"
+    #&!off
+    tcl_install(DEVELOPMENT
+                    FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/dynamic/dlfcn.h"
+                        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/"
                 )
-    endif ()
+    #&!on
     return ()
 endif ()
 

@@ -51,13 +51,11 @@ if (TCL_ENABLE_TESTS)
 endif ()
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/shell.tcl"
-            RENAME "shell-${SHELL_TCL_VERSION}.tm"
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/8.4/platform"
+tcl_install(RUNTIME_ONLY
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/shell.tcl"
+                    RENAME "shell-${SHELL_TCL_VERSION}.tm"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/8.4/platform"
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/platform.tcl"
+                    RENAME "platform-${PLATFORM_TCL_VERSION}.tm"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/8.4/"
             )
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/platform.tcl"
-            RENAME "platform-${PLATFORM_TCL_VERSION}.tm"
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/8.4/"
-            )
-endif ()

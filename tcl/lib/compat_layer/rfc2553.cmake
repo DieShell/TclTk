@@ -32,7 +32,7 @@ endif ()
 cmake_push_check_state(RESET)
 ## Headers #####################################################################
 check_include_file("sys/socket.h" HAVE_SYS_SOCKET_H)
-check_include_file("netdb.h"      HAVE_NETDB_H)
+check_include_file("netdb.h" HAVE_NETDB_H)
 check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
 
 if (HAVE_SYS_SOCKET_H)
@@ -47,9 +47,9 @@ endif ()
 
 ## Types #######################################################################
 check_type_size("struct sockaddr_storage" STRUCT_SOCKADDR_STORAGE)
-check_type_size("struct in6_addr"         STRUCT_IN6_ADDR)
-check_type_size("struct sockaddr_in6"     STRUCT_SOCKADDR_IN6)
-check_type_size("struct addrinfo"         STRUCT_ADDRINFO)
+check_type_size("struct in6_addr" STRUCT_IN6_ADDR)
+check_type_size("struct sockaddr_in6" STRUCT_SOCKADDR_IN6)
+check_type_size("struct addrinfo" STRUCT_ADDRINFO)
 if (HAVE_STRUCT_ADDRINFO
     AND HAVE_STRUCT_IN6_ADDR
     AND HAVE_STRUCT_SOCKADDR_IN6
@@ -60,25 +60,25 @@ else ()
 endif ()
 
 ## Functions ###################################################################
-check_symbol_exists("getaddrinfo"  "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_GETADDRINFO)
+check_symbol_exists("getaddrinfo" "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_GETADDRINFO)
 check_symbol_exists("gai_strerror" "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_GAI_STRERROR)
 check_symbol_exists("freeaddrinfo" "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_FREEADDRINFO)
-check_symbol_exists("getnameinfo"  "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_GETNAMEINFO)
+check_symbol_exists("getnameinfo" "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_GETNAMEINFO)
 
 if (HAVE_GETADDRINFO
     AND HAVE_GAI_STRERROR
     AND HAVE_FREEADDRINFO
     AND HAVE_GETNAMEINFO)
-    set (_TCL_HAVE_RFC_FUNCS 1)
+    set(_TCL_HAVE_RFC_FUNCS 1)
 else ()
-    set (_TCL_HAVE_RFC_FUNCS 0)
+    set(_TCL_HAVE_RFC_FUNCS 0)
 endif ()
 
 cmake_pop_check_state()
 
 # if we have everything we need, do not do anything
 if (_TCL_HAVE_RFC_FUNCS AND _TCL_HAVE_RFC_TYPES)
-    return ()
+    return()
 endif ()
 
 ## Target ######################################################################
@@ -95,10 +95,9 @@ set(TCL_COMPAT_FILES
     "${TCL_COMPAT_FILES};${CMAKE_CURRENT_SOURCE_DIR}/src/rfc2553/fake-rfc2553.c"
     CACHE INTERNAL "" FORCE)
 
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/rfc2553/compat/fake-rfc2553.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
+#&!off
+tcl_install(DEVELOPMENT
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/rfc2553/compat/fake-rfc2553.h"
+                DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/tcl${TCL_DOUBLE_VERSION}/generic/compat"
             )
-endif ()
+#&!on

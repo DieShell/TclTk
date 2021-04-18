@@ -24,7 +24,7 @@ if (TCL_ENABLE_TESTS)
     add_custom_command(OUTPUT "${TK_TEST_LIBRARY}/msgs/hu.msg"
                        MAIN_DEPENDENCY hu.msg
                        COMMENT "Copying locales for tktest"
-                       COMMAND 
+                       COMMAND
                        "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}"
                                                             "${TK_TEST_LIBRARY}/msgs"
                        )
@@ -34,9 +34,10 @@ if (TCL_ENABLE_TESTS)
 endif ()
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(DIRECTORY .
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}/msgs"
-            PATTERN "CMakeLists.txt" EXCLUDE
+#&!off
+tcl_install(RUNTIME_ONLY
+                DIRECTORY .
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}/msgs"
+                    PATTERN "CMakeLists.txt" EXCLUDE
             )
-endif()
+#&!on

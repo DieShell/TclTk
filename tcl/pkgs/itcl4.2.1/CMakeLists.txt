@@ -29,6 +29,15 @@ set(ITCL_MINOR_VERSION 2)
 set(ITCL_RELEASE_LEVEL 2)
 set(ITCL_RELEASE_SERIAL 0) # ??
 
+## Options #####################################################################
+option(TEA_ENABLE_ITCL
+       "Enable building [Incr Tcl] [On]" On
+       )
+
+if (NOT TEA_ENABLE_ITCL)
+    return ()
+endif ()
+
 ## Target ######################################################################
 add_library(tea_itcl SHARED
             src/itcl.h
@@ -131,34 +140,29 @@ file(GENERATE
      CONDITION "$<CONFIG:Release>"
      )
 
-if (TCL_ENABLE_INSTALL)
-    install(TARGETS tea_itcl tea_itclstub
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                TARGETS tea_itcl
+                    RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itcl.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclHullCmds.tcl"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclWidget.tcl"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
+            DEFAULT
+                TARGETS tea_itcl tea_itclstub
+                    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
+            DEVELOPMENT
+                FILES "${CMAKE_CURRENT_BINARY_DIR}/itclConfig.sh"
+                    CONFIGURATIONS "Release"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/itcl.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/itcl2TclOO.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/itclDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/itclInt.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/itclIntDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/itclMigrate2TclCore.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/itclTclIntStubsFcn.h"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
             )
-    install(FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itcl.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclHullCmds.tcl"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclWidget.tcl"
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
-            )
-    if (CMAKE_BUILD_TYPE STREQUAL "Release")
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/itclConfig.sh"
-                DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
-                )
-    endif ()
-endif ()
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/itcl.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/itcl2TclOO.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/itclDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/itclInt.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/itclIntDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/itclMigrate2TclCore.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/itclTclIntStubsFcn.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}"
-            )
-endif ()
+#&!on

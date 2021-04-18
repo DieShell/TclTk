@@ -31,10 +31,9 @@ if (TCL_ENABLE_TESTS)
 endif ()
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/pkgIndex.tcl"
-            DESTINATION
-            "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
+#&!off
+tcl_install(RUNTIME_ONLY
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/pkgIndex.tcl"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
             )
-endif ()
+#&!on

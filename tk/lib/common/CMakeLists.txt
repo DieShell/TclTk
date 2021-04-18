@@ -94,13 +94,12 @@ target_include_directories(tk_config INTERFACE
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            )
 
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tk.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tkDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tkIntXlibDecls.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/src/tkPlatDecls.h"
-            DESTINATION
-            "${CMAKE_INSTALL_INCLUDEDIR}"
+#&!off
+tcl_install(DEVELOPMENT
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/tk.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tkDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tkIntXlibDecls.h"
+                      "${CMAKE_CURRENT_SOURCE_DIR}/src/tkPlatDecls.h"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
             )
-endif ()
+#&!on

@@ -65,9 +65,10 @@ target_sources(tk_config INTERFACE
                )
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL_DEVELOPMENT)
-    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/X/X11"
-            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-            FILES_MATCHING PATTERN "*.h"
+#&!off
+tcl_install(DEVELOPMENT
+                DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/X/X11"
+                    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+                    FILES_MATCHING PATTERN "*.h"
             )
-endif ()
+#&!on

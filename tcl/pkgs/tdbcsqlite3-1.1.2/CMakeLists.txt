@@ -27,6 +27,19 @@ project(TEA-TDBC-SQLite
 option(TEA_TDBC_SQLITE_ENABLE_TESTS
        "Enable running tests for the TDBC PostgreSQL connector [Off]" Off
        )
+if (TEA_ENABLE_SQLITE AND TEA_ENABLE_TDBC)
+    set(_default On)
+else ()
+    set(_default Off)
+endif ()
+option(TEA_ENABLE_TDBC_SQLITE
+       "Enable building TDBC SQLite connector [${_default}]" "${_default}"
+       )
+
+if (NOT TEA_ENABLE_TDBC_SQLITE)
+    return()
+endif ()
+
 
 ## Configuration ###############################################################
 set(PACKAGE_VERSION "${TDBC_VERSION}")
@@ -39,9 +52,10 @@ configure_file(pkgIndex.tcl.in
 add_subdirectory(tests)
 
 ## Install #####################################################################
-if (TCL_ENABLE_INSTALL)
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcsqlite3.tcl"
-            RENAME "sqlite3-${TDBC_VERSION}.tm"
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/${TCL_VERSION}/tdbc/"
+#&!off
+tcl_install(RUNTIME_ONLY
+                FILES "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcsqlite3.tcl"
+                    RENAME "sqlite3-${TDBC_VERSION}.tm"
+                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/${TCL_VERSION}/tdbc/"
             )
-endif ()
+#&!on
