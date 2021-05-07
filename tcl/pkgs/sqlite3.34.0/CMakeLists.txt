@@ -91,7 +91,7 @@ if (HAVE_DECL_STRERROR_R)
     check_c_source_compiles([[
 #include <string.h>
 int
-main() {
+main() {
     *strerror_r(0, 0, 0);
 }
 ]] STRERROR_R_CHAR_P)
@@ -174,7 +174,7 @@ add_subdirectory(tests)
 #&!off
 tcl_install(RUNTIME_ONLY
                 TARGETS tea_sqlite
-                    RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
+                    RUNTIME DESTINATION "${TCL_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
                     DESTINATION "${TCL_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
             DEFAULT
