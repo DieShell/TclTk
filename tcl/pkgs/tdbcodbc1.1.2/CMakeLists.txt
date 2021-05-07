@@ -115,7 +115,7 @@ tcl_install(RUNTIME_ONLY
                     RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcodbc.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
             DEFAULT
                 TARGETS tea_tdbc_odbc
                     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"

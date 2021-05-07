@@ -105,7 +105,7 @@ tcl_install(RUNTIME_ONLY
                     RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tcl/ttrace.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
             DEFAULT
                 TARGETS tea_thread
                     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"

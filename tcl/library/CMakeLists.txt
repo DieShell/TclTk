@@ -51,7 +51,7 @@ tcl_install(RUNTIME_ONLY
                       "${CMAKE_CURRENT_SOURCE_DIR}/tclIndex"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tm.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/word.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tcl${TCL_VERSION}"
             )
 #&!on
 

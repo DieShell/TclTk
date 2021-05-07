@@ -34,6 +34,6 @@ endif ()
 #&!off
 tcl_install(RUNTIME_ONLY
                 FILES "${CMAKE_CURRENT_SOURCE_DIR}/pkgIndex.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/reg${TCL_REG_VERSION}"
             )
 #&!on

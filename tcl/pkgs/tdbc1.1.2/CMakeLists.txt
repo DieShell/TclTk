@@ -165,7 +165,7 @@ if (TCL_ENABLE_INSTALL)
                         RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
                     FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
                           "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbc.tcl"
-                        DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
+                        DESTINATION "${TCL_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"
                 DEFAULT
                     TARGETS tea_tdbc
                         ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbc${TDBC_VERSION}"

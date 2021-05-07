@@ -37,6 +37,6 @@ endif ()
 tcl_install(RUNTIME_ONLY
                 FILES "${CMAKE_CURRENT_SOURCE_DIR}/http.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/pkgIndex.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}/${HTTP_DIR}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tcl${TCL_VERSION}/${HTTP_DIR}"
             )
 #&!on

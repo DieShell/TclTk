@@ -40,6 +40,6 @@ if (TCL_ENABLE_INSTALL)
     tcl_install(RUNTIME_ONLY
                 FILES "${CMAKE_CURRENT_SOURCE_DIR}/tcltest.tcl"
                     RENAME "tcltest-${TCLTEST_TCL_VERSION}.tm"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/8.5/"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/8.5/"
                 )
 endif ()

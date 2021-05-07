@@ -37,7 +37,7 @@ endif ()
 #&!off
 tcl_install(RUNTIME_ONLY
                 DIRECTORY .
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}/ttk"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tk${TK_VERSION}/ttk"
                     PATTERN "CMakeLists.txt" EXCLUDE
             )
 #&!on

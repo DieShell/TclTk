@@ -43,6 +43,6 @@ endif ()
 tcl_install(RUNTIME_ONLY
                 FILES "${CMAKE_CURRENT_SOURCE_DIR}/optparse.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/pkgIndex.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}/opt${OPT_TCL_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tcl${TCL_VERSION}/opt${OPT_TCL_VERSION}"
             )
 #&!on

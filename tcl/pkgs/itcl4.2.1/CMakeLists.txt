@@ -148,7 +148,7 @@ tcl_install(RUNTIME_ONLY
                       "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itcl.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclHullCmds.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tcl/itclWidget.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"
             DEFAULT
                 TARGETS tea_itcl tea_itclstub
                     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/itcl${ITCL_VERSION}"

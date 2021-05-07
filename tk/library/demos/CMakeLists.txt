@@ -37,7 +37,7 @@ endif ()
 #&!off
 tcl_install(DEFAULT
                 DIRECTORY .
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}/demos"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tk${TK_VERSION}/demos"
                     PATTERN "CMakeLists.txt" EXCLUDE
             )
 #&!on

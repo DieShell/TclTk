@@ -102,7 +102,7 @@ tcl_install(RUNTIME_ONLY
                     RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcpostgres.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
             DEFAULT
                 TARGETS tea_tdbc_pq
                     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"

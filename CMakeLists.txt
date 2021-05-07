@@ -182,6 +182,13 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT
    set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}\\Tcl" CACHE PATH "..." FORCE)
 endif()
 
+## Tcl Install libdir ##########################################################
+# Some platform install binaries into lib64, as they are, well, 64-bit binaries.
+# Tcl, however, does not account for this and expects it's stuff to be installed
+# in plain lib. To fix it, we install binaries into CMAKE_INSTALL_LIBDIR but for
+# Tcl scripts and stdlib we use TCL_INSTALL_LIBDIR which is just lib.
+set(TCL_INSTALL_LIBDIR lib)
+
 ## CTest support ###############################################################
 # CTest needs to be included into the top-level CMakeLists.txt to be allowed
 # to call ctest from the build directory

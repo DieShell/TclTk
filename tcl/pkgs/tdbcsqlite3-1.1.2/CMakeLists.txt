@@ -56,6 +56,6 @@ add_subdirectory(tests)
 tcl_install(RUNTIME_ONLY
                 FILES "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcsqlite3.tcl"
                     RENAME "sqlite3-${TDBC_VERSION}.tm"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/${TCL_VERSION}/tdbc/"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tcl${TCL_MAJOR_VERSION}/${TCL_VERSION}/tdbc/"
             )
 #&!on

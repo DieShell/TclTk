@@ -155,7 +155,7 @@ tcl_install(RUNTIME_ONLY
                 TARGETS tk
                     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tk${TK_VERSION}"
             DEFAULT
                 TARGETS tk tkstub wish
                     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"

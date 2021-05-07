@@ -176,7 +176,7 @@ tcl_install(RUNTIME_ONLY
                 TARGETS tea_sqlite
                     RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
             DEFAULT
                 TARGETS tea_sqlite
                     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"

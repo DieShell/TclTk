@@ -38,7 +38,7 @@ endif ()
 #&!off
 tcl_install(RUNTIME_ONLY
                 DIRECTORY .
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}/encoding"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tcl${TCL_VERSION}/encoding"
                     PATTERN "CMakeLists.txt" EXCLUDE
             )
 #&!on

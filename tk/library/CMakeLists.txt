@@ -70,7 +70,7 @@ tcl_install(RUNTIME_ONLY
                       "${CMAKE_CURRENT_SOURCE_DIR}/unsupported.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/xmfbox.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tclIndex"
-                    DESTINATION "${CMAKE_INSTALL_LIBDIR}/tk${TK_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tk${TK_VERSION}"
             )
 #&!on
 
