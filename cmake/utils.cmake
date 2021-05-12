@@ -49,7 +49,7 @@ function(tcl_install)
     ## Helper functions ########################################################
     function(tcl_install_many)
         set(SPLIT_REGEX
-            [[(TARGETS|FILES|PROGRAMS|DIRECTORY|SCRIPT|CODE|EXPORT)]]
+            [[^(TARGETS|FILES|PROGRAMS|DIRECTORY|SCRIPT|CODE|EXPORT)$]]
             )
 
         set(INSTALL_CALLS "${ARGV}")

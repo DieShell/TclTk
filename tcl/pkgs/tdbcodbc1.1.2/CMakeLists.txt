@@ -112,7 +112,7 @@ add_subdirectory(tests)
 #&!off
 tcl_install(RUNTIME_ONLY
                 TARGETS tea_tdbc_odbc
-                    RUNTIME DESTINATION "${TCL_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcodbc.tcl"
                     DESTINATION "${TCL_INSTALL_LIBDIR}/tdbcodbc${TDBC_VERSION}"

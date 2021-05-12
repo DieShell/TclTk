@@ -174,7 +174,7 @@ add_subdirectory(tests)
 #&!off
 tcl_install(RUNTIME_ONLY
                 TARGETS tea_sqlite
-                    RUNTIME DESTINATION "${TCL_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
                     DESTINATION "${TCL_INSTALL_LIBDIR}/sqlite${SQLITE_VERSION}"
             DEFAULT

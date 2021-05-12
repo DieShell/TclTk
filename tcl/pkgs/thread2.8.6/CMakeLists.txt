@@ -102,7 +102,7 @@ add_subdirectory(tests)
 #&!off
 tcl_install(RUNTIME_ONLY
                 TARGETS tea_thread
-                    RUNTIME DESTINATION "${TCL_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tcl/ttrace.tcl"
                     DESTINATION "${TCL_INSTALL_LIBDIR}/thread${PROJECT_VERSION}"

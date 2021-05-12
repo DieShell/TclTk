@@ -99,7 +99,7 @@ add_subdirectory(tests)
 #&!off
 tcl_install(RUNTIME_ONLY
                 TARGETS tea_tdbc_pq
-                    RUNTIME DESTINATION "${TCL_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
+                    DESTINATION "${TCL_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgIndex.tcl"
                       "${CMAKE_CURRENT_SOURCE_DIR}/tcl/tdbcpostgres.tcl"
                     DESTINATION "${TCL_INSTALL_LIBDIR}/tdbcpostgres${TDBC_VERSION}"
