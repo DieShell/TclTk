@@ -142,6 +142,10 @@ set_source_files_properties(lib/unix_backend/src/tclUnixInit.c
                             "TCL_LIBRARY=\"${CMAKE_INSTALL_LIBDIR}/tcl${TCL_VERSION}\";TCL_PACKAGE_PATH=\"{${CMAKE_INSTALL_LIBDIR}}\""
                             )
 
+set_source_files_properties(lib/osx_backend/src/tclMacOSXNotify.c PROPERTIES
+                            C_STANDARD 99
+                            )
+
 ## Tests #######################################################################
 add_subdirectory(tests)
 
