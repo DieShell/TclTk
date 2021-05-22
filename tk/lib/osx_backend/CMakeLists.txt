@@ -141,8 +141,6 @@ if (TK_USE_AQUA)
                           )
     
     enable_language(OBJC)
-    set (CMAKE_C_STANDARD 99)
-    set (CMAKE_C_EXTENSIONS ON)
 
     set (CMAKE_FIND_FRAMEWORK ${_CMAKE_FIND_FRAMEWORK})
 
@@ -231,6 +229,3 @@ if (NOT TK_USE_AQUA)
         target_sources(tk PRIVATE src/tkUnixFont.c)
     endif ()
 endif ()
-
-target_link_libraries(tk_config INTERFACE
-                      )
