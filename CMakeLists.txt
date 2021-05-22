@@ -23,7 +23,7 @@ cmake_minimum_required(VERSION 3.16)
 ## CMake system setup ##########################################################
 ## Languages ##
 enable_language(C)
-set(CMAKE_C_STANDARD 89)
+set(CMAKE_C_STANDARD 90)
 
 ## Policies ##
 cmake_policy(SET CMP0009 NEW) # Do not follow symlinks in GLOB_RECURSE
