@@ -12,7 +12,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>@TK_LIB_FILE@</string>
+    <string>$<TARGET_FILE_NAME:tk></string>
 	<key>CFBundleGetInfoString</key>
 	<string>Tk @TK_WINDOWINGSYSTEM@ @TK_VERSION@@TK_PATCH_LEVEL@,
 Copyright © 1989-@TK_YEAR@ Tcl Core Team,
