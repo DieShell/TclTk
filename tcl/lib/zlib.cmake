@@ -35,7 +35,7 @@ else ()
 endif ()
 GetDependency(z
               REPOSITORY_URL "https://github.com/DieShell/zlib.git"
-              VERSION "v1.2.11-5"
+              VERSION "v1.2.11-6"
               )
 
 target_link_libraries(tcl_config INTERFACE 
