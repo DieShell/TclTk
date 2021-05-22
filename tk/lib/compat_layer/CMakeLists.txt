@@ -23,7 +23,7 @@ project(tk-compat-layer C)
 # the Tcl build, however, if X11 is not available on non Aqua build, we
 # provide that. Applies to Windows too, but don't ask me why.
 
-if (TK_WINDOWING_SYSTEM STREQUAL "Aqua")
+if (TK_ENABLE_AQUA)
     # Nothing to do with Aqua
     return ()
 endif ()

@@ -53,20 +53,22 @@ check_library_exists("Xbsd" "main" "" HAVE_XBSD)
 
 check_struct_has_member("struct passwd" "pw_gecos" "pwd.h" HAVE_PW_GECOS)
 
-find_package(X11 COMPONENTS Xft Xkb Xext Xss)
-if (CMAKE_C_COMPILER_ID STREQUAL "GNU"
-    OR CMAKE_C_COMPILER_ID MATCHES "Clang")
-    list(APPEND CMAKE_REQUIRED_FLAGS "-Werror")
-    list(APPEND CMAKE_REQUIRED_INCLUDES "${X11_INCLUDE_DIR}")
-    list(APPEND CMAKE_REQUIRED_INCLUDES "${X11_Xkb_INCLUDE_PATH}")
-    list(APPEND CMAKE_REQUIRED_LIBRARIES "${X11_LIBRARIES}")
-    list(APPEND CMAKE_REQUIRED_LIBRARIES "${X11_Xkb_LIB}")
-    check_c_source_compiles([[
-        #include <X11/Xlib.h>
-        int main() {
-            (void)XKeycodeToKeysym(0,0,0);
-        }
-    ]] IS_XKEYCODETOKEYSYM_DEPRECATED)
+if (NOT TK_USE_AQUA)
+    find_package(X11 COMPONENTS Xft Xkb Xext Xss)
+    if (CMAKE_C_COMPILER_ID STREQUAL "GNU"
+        OR CMAKE_C_COMPILER_ID MATCHES "Clang")
+        list(APPEND CMAKE_REQUIRED_FLAGS "-Werror")
+        list(APPEND CMAKE_REQUIRED_INCLUDES "${X11_INCLUDE_DIR}")
+        list(APPEND CMAKE_REQUIRED_INCLUDES "${X11_Xkb_INCLUDE_PATH}")
+        list(APPEND CMAKE_REQUIRED_LIBRARIES "${X11_LIBRARIES}")
+        list(APPEND CMAKE_REQUIRED_LIBRARIES "${X11_Xkb_LIB}")
+        check_c_source_compiles([[
+            #include <X11/Xlib.h>
+            int main() {
+                (void)XKeycodeToKeysym(0,0,0);
+            }
+        ]] IS_XKEYCODETOKEYSYM_DEPRECATED)
+    endif ()
 endif ()
 
 cmake_pop_check_state()
@@ -81,32 +83,34 @@ target_include_directories(tk_config INTERFACE
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            )
-if (TK_ENABLE_XFT)
-    if (X11_Xft_FOUND)
-        target_link_libraries(tk_config INTERFACE
-                              X11::Xft
-                              )
-        set(TK_LIBS "${TK_LIBS};${X11_Xft_LIB}" CACHE INTERNAL "")
-        target_compile_definitions(tk_config INTERFACE
-                                   HAVE_XFT=1
-                                   )
-        target_sources(tk PRIVATE src/tkUnixRFont.c)
+if (NOT TK_USE_AQUA)
+    if (TK_ENABLE_XFT)
+        if (X11_Xft_FOUND)
+            target_link_libraries(tk_config INTERFACE
+                                  X11::Xft
+                                  )
+            set(TK_LIBS "${TK_LIBS};${X11_Xft_LIB}" CACHE INTERNAL "")
+            target_compile_definitions(tk_config INTERFACE
+                                       HAVE_XFT=1
+                                       )
+            target_sources(tk PRIVATE src/tkUnixRFont.c)
+        else ()
+            message(WARNING [[Xft was requested but CMake couldn't find it for us. Not using it.]])
+            target_sources(tk PRIVATE src/tkUnixFont.c)
+        endif ()
     else ()
-        message(WARNING [[Xft was requested but CMake couldn't find it for us. Not using it.]])
         target_sources(tk PRIVATE src/tkUnixFont.c)
     endif ()
-else ()
-    target_sources(tk PRIVATE src/tkUnixFont.c)
-endif ()
 
-if (TK_ENABLE_XSS)
-    if (X11_Xext_FOUND AND X11_Xss_FOUND)
-        target_link_libraries(tk_config INTERFACE X11::Xext)
-        target_link_libraries(tk_config INTERFACE X11::Xss)
-        set(TK_LIBS "${TK_LIBS};${X11_Xss_LIB};${X11_Xext_LIB}" CACHE INTERNAL "")
-        target_compile_definitions(tk_config INTERFACE HAVE_XSS=1)
-    else ()
-        message(WARNING [[Xss was requested but CMake couldn't find it for us. Not using it.]])
+    if (TK_ENABLE_XSS)
+        if (X11_Xext_FOUND AND X11_Xss_FOUND)
+            target_link_libraries(tk_config INTERFACE X11::Xext)
+            target_link_libraries(tk_config INTERFACE X11::Xss)
+            set(TK_LIBS "${TK_LIBS};${X11_Xss_LIB};${X11_Xext_LIB}" CACHE INTERNAL "")
+            target_compile_definitions(tk_config INTERFACE HAVE_XSS=1)
+        else ()
+            message(WARNING [[Xss was requested but CMake couldn't find it for us. Not using it.]])
+        endif ()
     endif ()
 endif ()
 
