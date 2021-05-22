@@ -49,11 +49,11 @@ option(TK_ENABLE_XSS
 ## System checks ###############################################################
 cmake_push_check_state(RESET)
 
-check_library_exists("Xbsd" "main" "" HAVE_XBSD)
-
 check_struct_has_member("struct passwd" "pw_gecos" "pwd.h" HAVE_PW_GECOS)
 
-if (NOT TK_USE_AQUA)
+if (NOT TK_ENABLE_AQUA)
+    check_library_exists("Xbsd" "main" "" HAVE_XBSD)
+    
     find_package(X11 COMPONENTS Xft Xkb Xext Xss)
     if (CMAKE_C_COMPILER_ID STREQUAL "GNU"
         OR CMAKE_C_COMPILER_ID MATCHES "Clang")

@@ -78,9 +78,11 @@ if (TCL_ENABLE_TESTS)
 endif ()
 
 ## Platform independent sources ################################################
-option(TK_ENABLE_AQUA
-       "Enable building Tk with Aqua [On]" On
-       )
+if (APPLE)
+    option(TK_ENABLE_AQUA
+           "Enable building Tk with Aqua [On]" On
+           )
+endif ()
 
 add_subdirectory(lib/compat_layer)
 add_subdirectory(bitmaps)
