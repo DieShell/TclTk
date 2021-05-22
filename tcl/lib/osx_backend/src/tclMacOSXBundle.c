@@ -142,6 +142,16 @@ OpenResourceMap(
 
 #endif /* HAVE_COREFOUNDATION */
 
+
+int
+Tcl_MacOSXOpenVersionedBundleResources(
+    Tcl_Interp *interp,
+    const char *bundleName,
+    const char *bundleVersion,
+    int hasResourceFile,
+    int maxPathLen,
+    char *libraryPath);
+
 /*
  *----------------------------------------------------------------------
  *

@@ -39,7 +39,10 @@ if (HAVE_DLFCN_H AND NOT APPLE) # apple is special
                    )
     return ()
 endif ()
-target_compile_definitions(tcl_config INTERFACE NO_DLFCN_H)
+
+if (NOT HAVE_DLFCN_H)
+    target_compile_definitions(tcl_config INTERFACE NO_DLFCN_H)
+endif ()
 
 ## AIX - sys/ldr.h #############################################################
 # AIX is a special beast, because instead of using platform API, we implement
