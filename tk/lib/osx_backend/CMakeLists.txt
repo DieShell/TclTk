@@ -44,9 +44,6 @@ target_sources(tk PRIVATE
 option(TK_ENABLE_XFT
        "Enable Xft support in Tk [On]" On
        )
-option(TK_ENABLE_AQUA
-       "Enable building Tk with Aqua [On]" On
-       )
 set(TK_USE_AQUA ${TK_ENABLE_AQUA})
 
 ## System checks ###############################################################

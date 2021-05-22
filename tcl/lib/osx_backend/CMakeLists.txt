@@ -112,7 +112,7 @@ target_compile_definitions(tcl_config INTERFACE
                            $<$<BOOL:HAVE_SYS_PATHS_H>:HAVE_SYS_PATHS_H=1>
                            $<$<BOOL:HAVE_COPYFILE_H>:HAVE_COPYFILE_H=1>
                            $<$<BOOL:HAVE_AVAILABILITYMACROS_H>:HAVE_AVAILABILITYMACROS_H=1>
-                           $<$<BOOL:HAVE_DARWIN_SUS_V3>_DARWIN_C_SOURCE=1>
+                           $<$<BOOL:HAVE_DARWIN_SUS_V3>:_DARWIN_C_SOURCE=1>
                            $<$<BOOL:HAVE_OSSPINLOCKLOCK>:HAVE_OSSPINLOCKLOCK=1>
                            $<$<BOOL:HAVE_GETATTRLIST>:HAVE_GETATTRLIST=1>
                            $<$<BOOL:HAVE_WEAK_IMPORT>:HAVE_WEAK_IMPORT=1>
