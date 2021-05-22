@@ -103,6 +103,7 @@ target_sources(tcl PRIVATE
 target_compile_definitions(tcl_config INTERFACE
                            NO_REALPATH=1
                            USE_VFORK=1
+                           MAC_OSX_TCL=1
                            "TCL_DEFAULT_ENCODING=\"utf-8\""
                            TCL_LOAD_FROM_MEMORY=1
                            TCL_WIDE_CLICKS=1
