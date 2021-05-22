@@ -22,21 +22,23 @@
 
 ## Target ######################################################################
 target_sources(tk PRIVATE
-               src/tkUnix.c src/tkUnix3d.c src/tkUnixButton.c
-               src/tkUnixColor.c src/tkUnixConfig.c src/tkUnixCursor.c src/tkUnixDefault.h
-               src/tkUnixDialog.c src/tkUnixDraw.c src/tkUnixEmbed.c src/tkUnixEvent.c
-               src/tkUnixFocus.c src/tkUnixInit.c src/tkUnixInt.h src/tkUnixKey.c
-               src/tkUnixMenu.c src/tkUnixPort.h src/tkUnixScrlbr.c src/tkUnixSelect.c
-               src/tkUnixSend.c src/tkUnixWm.c src/tkUnixXId.c
+               src/tkMacOSX.h src/tkMacOSXBitmap.c src/tkMacOSXButton.c 
+               src/tkMacOSXClipboard.c src/tkMacOSXColor.c src/tkMacOSXColor.h 
+               src/tkMacOSXConfig.c src/tkMacOSXConstants.h src/tkMacOSXCursor.c 
+               src/tkMacOSXCursors.h src/tkMacOSXDebug.c src/tkMacOSXDebug.h 
+               src/tkMacOSXDefault.h src/tkMacOSXDialog.c src/tkMacOSXDraw.c 
+               src/tkMacOSXEmbed.c src/tkMacOSXEntry.c src/tkMacOSXEvent.c 
+               src/tkMacOSXEvent.h src/tkMacOSXFont.c src/tkMacOSXFont.h 
+               src/tkMacOSXHLEvents.c src/tkMacOSXImage.c src/tkMacOSXInit.c 
+               src/tkMacOSXInt.h src/tkMacOSXKeyboard.c src/tkMacOSXKeyEvent.c 
+               src/tkMacOSXKeysyms.h src/tkMacOSXMenu.c src/tkMacOSXMenubutton.c 
+               src/tkMacOSXMenus.c src/tkMacOSXMouseEvent.c src/tkMacOSXNotify.c 
+               src/tkMacOSXPort.h src/tkMacOSXPrivate.h src/tkMacOSXRegion.c 
+               src/tkMacOSXScale.c src/tkMacOSXScrlbr.c src/tkMacOSXSend.c 
+               src/tkMacOSXServices.c src/tkMacOSXSubwindows.c src/tkMacOSXTest.c 
+               src/tkMacOSXWindowEvent.c src/tkMacOSXWm.c src/tkMacOSXWm.h 
+               src/tkMacOSXXCursors.h src/tkMacOSXXStubs.c src/ttkMacOSXTheme.c
                )
-target_sources(wish PRIVATE
-               src/tkAppInit.c
-               )
-if (TARGET tktest)
-    target_sources(tktest PRIVATE
-                   src/tkAppInit.c
-                   )
-endif ()
 
 ## Options #####################################################################
 option(TK_ENABLE_XFT
