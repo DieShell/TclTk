@@ -199,11 +199,9 @@ check_c_source_compiles([[
 cmake_pop_check_state()
 
 ## Xt ##########################################################################
-if (NOT APPLE)
-    find_package(X11 REQUIRED Xt)
-    target_link_libraries(tcl_config INTERFACE X11::Xt)
-    set(TCL_LIBS "${TCL_LIBS};${X11_X11_LIB};${X11_Xt_LIB}" CACHE INTERNAL "")
-endif ()
+find_package(X11 REQUIRED Xt)
+target_link_libraries(tcl_config INTERFACE X11::X11 X11::Xt)
+set(TCL_LIBS "${TCL_LIBS};${X11_X11_LIB};${X11_Xt_LIB}" CACHE INTERNAL "")
 
 ## Configuration ###############################################################
 target_compile_definitions(tcl_config INTERFACE
