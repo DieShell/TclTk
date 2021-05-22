@@ -87,7 +87,7 @@ if (WIN32)
     add_subdirectory(lib/win32_backend)
 else ()
     if (APPLE)
-        add_subdirectory(lib/macos_backend)
+        add_subdirectory(lib/osx_backend)
     endif ()
 
     if (NOT UNIX)
