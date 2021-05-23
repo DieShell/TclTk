@@ -19,7 +19,6 @@
 # 3. This notice may not be removed or altered from any source distribution.
 
 ## MacOS specific Tk source files and configuration checks
-enable_language(OBJC)
 
 ## Target ######################################################################
 set (TK_MACOS_OBJC_SOURCES 

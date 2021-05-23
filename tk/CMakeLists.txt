@@ -93,6 +93,7 @@ if (WIN32)
     add_subdirectory(lib/win32_backend)
 else ()
     if (APPLE)
+        enable_language(OBJC)
         add_subdirectory(lib/osx_backend)
     endif ()
 
