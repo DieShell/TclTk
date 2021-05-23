@@ -120,12 +120,19 @@ set_source_files_properties("lib/win32_backend/src/winMain.c"
                             PROPERTIES
                             COMPILE_DEFINITIONS "UNICODE=1;_UNICODE=1"
                             )
-set (TK_OBJC_SOURCES ${TK_MACOS_OBJC_SOURCES})
-list(TRANSFORM TK_OBJC_SOURCES PREPEND "lib/osx_backend/")
-set_source_files_properties(${TK_OBJC_SOURCES} 
-                            PROPERTIES
-                            LANGUAGE OBJC
-                            )
+if (APPLE)
+    set (TK_OBJC_SOURCES ${TK_MACOS_OBJC_SOURCES})
+    list(TRANSFORM TK_OBJC_SOURCES PREPEND "lib/osx_backend/")
+
+    set (TK_OBJC_SOURCES_UNIX ${TK_MACOS_OBJC_SOURCES_UNIX})
+    list(TRANSFORM TK_OBJC_SOURCES_UNIX PREPEND "lib/unix_backend/")
+
+    set (TK_OBJC_SOURCES "${TK_OBJC_SOURCES};${TK_OBJC_SOURCES_UNIX}")
+    set_source_files_properties(${TK_OBJC_SOURCES} 
+                                PROPERTIES
+                                LANGUAGE OBJC
+                                )
+endif ()
 
 set(TK_LIB_NAME "tk${TK_DOUBLE_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}"
     CACHE INTERNAL "" FORCE

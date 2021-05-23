@@ -20,15 +20,21 @@
 
 ## UNIX-ish OS specific Tk source files and configuration checks
 
-## Target ######################################################################
+## Target ####################################################################
+set(TK_MACOS_OBJC_SOURCES_UNIX_
+    src/tkUnix.c src/tkUnix3d.c src/tkUnixButton.c src/tkUnixColor.c 
+    src/tkUnixConfig.c src/tkUnixCursor.c src/tkUnixDialog.c src/tkUnixDraw.c 
+    src/tkUnixEmbed.c src/tkUnixEvent.c src/tkUnixFocus.c src/tkUnixInit.c 
+    src/tkUnixKey.c src/tkUnixMenu.c src/tkUnixScrlbr.c src/tkUnixSelect.c
+    src/tkUnixSend.c src/tkUnixWm.c src/tkUnixXId.c
+    )
 target_sources(tk PRIVATE
-               src/tkUnix.c src/tkUnix3d.c src/tkUnixButton.c
-               src/tkUnixColor.c src/tkUnixConfig.c src/tkUnixCursor.c src/tkUnixDefault.h
-               src/tkUnixDialog.c src/tkUnixDraw.c src/tkUnixEmbed.c src/tkUnixEvent.c
-               src/tkUnixFocus.c src/tkUnixInit.c src/tkUnixInt.h src/tkUnixKey.c
-               src/tkUnixMenu.c src/tkUnixPort.h src/tkUnixScrlbr.c src/tkUnixSelect.c
-               src/tkUnixSend.c src/tkUnixWm.c src/tkUnixXId.c
+               ${TK_MACOS_OBJC_SOURCES_UNIX_}
+               src/tkUnixDefault.h
+               src/tkUnixInt.h
+               src/tkUnixPort.h
                )
+list(APPEND TK_MACOS_OBJC_SOURCES_UNIX_ src/tkAppInit.c)
 target_sources(wish PRIVATE
                src/tkAppInit.c
                )
@@ -37,6 +43,10 @@ if (TARGET tktest)
                    src/tkAppInit.c
                    )
 endif ()
+
+set (TK_MACOS_OBJC_SOURCES_UNIX ${TK_MACOS_OBJC_SOURCES_UNIX_} 
+     CACHE INTERNAL "need OjbC" FORCE
+     )
 
 ## Options #####################################################################
 option(TK_ENABLE_XFT
