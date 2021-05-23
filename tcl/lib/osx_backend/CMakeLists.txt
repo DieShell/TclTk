@@ -119,4 +119,16 @@ target_compile_definitions(tcl_config INTERFACE
                            $<$<BOOL:HAVE_WEAK_IMPORT>:HAVE_WEAK_IMPORT=1>
                            $<$<BOOL:HAVE_COPYFILE>:HAVE_COPYFILE=1>
                            )
+if (HAVE_COREFOUNDATION)
+    set (_CMAKE_FIND_FRAMEWORK "${CMAKE_FIND_FRAMEWORK}")
+    set (CMAKE_FIND_FRAMEWORK ONLY)
 
+    find_library(CF_FMW CoreFoundation)
+    target_link_libraries(tcl_config INTERFACE
+                          "${CF_FMW}"
+                          )
+    
+    enable_language(OBJC)
+
+    set (CMAKE_FIND_FRAMEWORK ${_CMAKE_FIND_FRAMEWORK})
+endif ()
