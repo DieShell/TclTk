@@ -18,7 +18,8 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
-## UNIX-ish OS specific Tk source files and configuration checks
+## MacOS specific Tk source files and configuration checks
+enable_language(OBJC)
 
 ## Target ######################################################################
 set (TK_MACOS_OBJC_SOURCES 
@@ -139,8 +140,6 @@ if (TK_USE_AQUA)
                           "${CARBON_FMW}" 
                           "${IOKIT_FMW}" 
                           )
-    
-    enable_language(OBJC)
 
     set (CMAKE_FIND_FRAMEWORK ${_CMAKE_FIND_FRAMEWORK})
 
