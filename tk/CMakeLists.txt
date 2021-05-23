@@ -119,6 +119,10 @@ set_source_files_properties("lib/win32_backend/src/winMain.c"
                             PROPERTIES
                             COMPILE_DEFINITIONS "UNICODE=1;_UNICODE=1"
                             )
+set_source_files_properties(${TK_MACOS_OBJC_SOURCES} 
+                            PROPERTIES
+                            LANGUAGE ObjC
+                            )
 
 set(TK_LIB_NAME "tk${TK_DOUBLE_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}"
     CACHE INTERNAL "" FORCE
