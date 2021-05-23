@@ -185,6 +185,7 @@ file(GENERATE OUTPUT "$<CONFIG>/Tk-Info.plist"
      )
 
 target_compile_definitions(tk_config INTERFACE
+                           MAC_OSX_TK=1
                            $<$<BOOL:${HAVE_PW_GECOS}>:HAVE_PW_GECOS=1>
                            $<$<BOOL:${X11_Xkb_FOUND}>:HAVE_XKBKEYCODETOKEYSYM=1>
                            $<$<BOOL:${IS_XKEYCODETOKEYSYM_DEPRECATED}>:XKBKEYCODETOKEYSYM_IS_DEPRECATED=1>
