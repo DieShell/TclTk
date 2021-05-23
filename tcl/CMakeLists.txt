@@ -28,7 +28,13 @@ add_library(tclstub STATIC)
 add_library(tcl_config INTERFACE)
 
 # link all the things together
-target_link_libraries(tclsh PUBLIC tcl tclstub)
+target_link_libraries(tclsh PUBLIC 
+                      tcl 
+                      $<$<NOT:$<PLATFORM_ID:Darwin>>:tclstub>
+                      )
+if (APPLE)
+    target_link_libraries(tcl PRIVATE tclstub)
+endif ()
 
 target_link_libraries(tclsh PUBLIC tcl_config)
 target_link_libraries(tcl PUBLIC tcl_config)
